@@ -1,0 +1,29 @@
+version: '3.7'
+services:
+  db:
+    image: mysql:5.7
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --skip-character-set-client-handshake
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456789
+      - MYSQL_DATABASE=finance-tracker-db
+      - MYSQL_USER=finance-tracker-user
+      - MYSQL_PASSWORD=123456789
+    ports:
+      - '3306:3306'
+
+  backend:
+    image: node:13
+    working_dir: /var/app/backend
+    ports:
+      - 3000:3000
+      - 9229:9229
+    command: npm start
+    volumes:
+      - ./packages/backend:/var/app/backend
+      - node_modules:/var/app/backend/node_modules
+
+volumes:
+  node_modules:
