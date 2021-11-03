@@ -1,7 +1,7 @@
 // tslint:disable-next-line: no-var-requires
 require('dotenv-safe').config();
 import 'reflect-metadata';
-import express, { Request, Response } from 'express';
+import express from 'express';
 import { createDatabaseConnection } from './util/createDatabaseConnection';
 import * as bodyParser from 'body-parser';
 import { globalRouter } from './router/global.router';
@@ -15,10 +15,6 @@ export const startServer = async () => {
     const dbConnection = await createDatabaseConnection();
 
     app.use(bodyParser.json());
-
-    app.get('/', async (_: Request, res: Response) => {
-      res.send('Hallo welt');
-    });
 
     app.use('/api', globalRouter);
 
