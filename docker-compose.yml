@@ -8,8 +8,8 @@ services:
       - --skip-character-set-client-handshake
     environment:
       - MYSQL_ROOT_PASSWORD=123456789
-      - MYSQL_DATABASE=finance-tracker-db
-      - MYSQL_USER=finance-tracker-user
+      - MYSQL_DATABASE=diary-app-db
+      - MYSQL_USER=diary-app-user
       - MYSQL_PASSWORD=123456789
     ports:
       - '3306:3306'
