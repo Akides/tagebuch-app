@@ -25,5 +25,15 @@ services:
       - ./packages/backend:/var/app/backend
       - node_modules:/var/app/backend/node_modules
 
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      - PMA_ARBITRARY=1
+
+
 volumes:
   node_modules:
