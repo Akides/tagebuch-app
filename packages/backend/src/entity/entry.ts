@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Day } from "./day";
 
 @Entity()
@@ -21,8 +21,8 @@ export class Entry {
     @Column({nullable: true})
     imgURL: string;
 
-    @OneToMany(() => Day, (day) => day.entry)
-    days: Day[];
+    @ManyToOne(() => Day, (day) => day.entries)
+    day: Day;
 
     
 

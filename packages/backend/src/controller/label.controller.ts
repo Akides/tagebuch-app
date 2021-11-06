@@ -63,8 +63,8 @@ export const deleteLabel = async (req:Request, res: Response) => {
 
 export const patchLabel = async (req:Request, res: Response) => {
   const labelId = req.params.labelId;
-  const name = req.params.name;
-  const color = req.params.color;
+  const name = req.body.name;
+  const color = req.body.color;
 
   const labelRepository = await getRepository(Label);
 

@@ -1,12 +1,15 @@
-import { PrimaryColumn, Entity, ManyToOne } from "typeorm";
+import { PrimaryColumn, Entity, OneToMany } from "typeorm";
 import { Entry } from "./entry";
 
 @Entity()
 export class Day {
 
-    @PrimaryColumn({type: 'timestamp', default: () => 'CURRENT_TIMESTAMP'}) // use sql statement
-    time: string;
+    @PrimaryColumn({unique: true})
+    date: string;
 
-    @ManyToOne(() => Entry, (entry) => entry.days)
-    entry: Entry;
+    //@PrimaryColumn({type: 'timestamp', default: () => 'CURRENT_TIMESTAMP'}) // use sql statement
+    //time: string;
+
+    @OneToMany(() => Entry, (entry) => entry.day)
+    entries: Entry[];
 }
