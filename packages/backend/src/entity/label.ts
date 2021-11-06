@@ -10,6 +10,10 @@ export class Label {
     @Column()
     name: string;
 
+    // color in hex
+    @Column({default: 'FFFF'})
+    color: string;
+
     @CreateDateColumn()
     createdAt: string;
 
