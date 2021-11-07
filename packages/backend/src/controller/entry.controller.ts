@@ -35,7 +35,7 @@ export const getEntry = async (req: Request, res: Response) => {
     const entryRepository = await getRepository(Entry);
 
     try {
-        const entry = entryRepository.findOneOrFail(entryId);
+        const entry = await entryRepository.findOneOrFail(entryId);
         res.send({
             data: entry
         });
@@ -43,4 +43,51 @@ export const getEntry = async (req: Request, res: Response) => {
         send404(res);
     }
 }
+
+export const deleteEntry = async (req:Request, res: Response) => {
+    const entryId = req.params.labelId;
+    const entryRepository = await getRepository(Entry);
+  
+    try {
+      const entry = await entryRepository.findOneOrFail(entryId);
+      await entryRepository.remove(entry);
+      res.send({});
+    } catch (error) {
+      send404(res);
+    }
+  };
+  
+  export const patchEntry = async (req: Request, res: Response) => {
+    const entryId = req.params.entryId;
+    const title = req.body.title;
+    const content = req.body.content;
+    const imgURL = req.body.imgURL;
+    const day = req.body.day;
+  
+    const entryRepository = await getRepository(Entry);
+  
+    try {
+      const entry = await entryRepository.findOneOrFail(entryId);
+      entry.title = title;
+      entry.content = content;
+      entry.imgURL = imgURL;
+      entry.day = day;  //foreign key
+      try {
+          await entryRepository.save(entry);
+      } catch (error) {
+          console.log(error);
+      }
+      res.send({
+        data: entry
+      });
+    } catch (error) {
+      send404(res);
+    }
+  }
+
+  export const addLabel = async (req: Request, res: Response) => {
+      const entryId = req.params.labelId;
+      const labelId = req.body.labelId;
+      // localhost:3000/api/entry/addLabel/entryId/labelId
+  }
 

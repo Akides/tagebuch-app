@@ -15,7 +15,7 @@ export class Entry {
     @Column({default: 'untitled'})
     title: string;
 
-    @Column({nullable: true})
+    @Column("text", {nullable: true})
     content: string;
 
     @Column({nullable: true})
