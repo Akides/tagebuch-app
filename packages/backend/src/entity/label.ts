@@ -22,5 +22,5 @@ export class Label {
 
     @ManyToMany(() => Entry)
     @JoinTable()
-    entry: Entry[];
+    entries: Entry[];
 }

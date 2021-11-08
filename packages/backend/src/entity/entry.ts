@@ -1,5 +1,6 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Day } from "./day";
+import { Label } from "./label";
 
 @Entity()
 export class Entry {
@@ -23,6 +24,10 @@ export class Entry {
 
     @ManyToOne(() => Day, (day) => day.entries)
     day: Day;
+
+    @ManyToMany(() => Label, label => label.entries)
+    @JoinTable()
+    labels: Label[];
 
     
 
