@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { getConnection, getRepository } from "typeorm";
 import { Entry } from "../entity/entry";
 import { Label } from '../entity/label';
-import { send404 } from '../util/responses';
+import { send202, send404 } from '../util/responses';
 
 export const createEntry = async (req: Request, res: Response) => {
     const entry = new Entry();
@@ -88,50 +88,81 @@ export const deleteEntry = async (req:Request, res: Response) => {
 
   /*
   export const addLabel = async (req: Request, res: Response) => {
-      const labelId = req.params.labelId;
-      const entryId = req.params.entryId;
+    const labelId = req.params.labelId;
+    const entryId = req.params.entryId;
 
-      const entryRepository = await getRepository(Entry);
-      const labelRepository = await getRepository(Label);
+    const entryRepository = await getRepository(Entry);
+    const labelRepository = await getRepository(Label);
 
-
+    try {
+      const entry = await entryRepository.findOneOrFail(entryId);
+      const label = await labelRepository.findOneOrFail(labelId);
       try {
-        const entry = await entryRepository.findOneOrFail(entryId);
-        const label = await labelRepository.findOneOrFail(labelId);
-        entry.labels.push(label);
+        await getConnection().createQueryBuilder().relation(Entry, "labels").of(entry).add(label);
+      } catch (error) {
+        send202(res);
+      }
+      res.send({
+        data: entry
+      });
+    } catch (error) {
+      send404(res);
+    }
+  }
 
-        try {
-          await entryRepository.save(entry);
-        } catch (error) {
-          console.log(error);
+  const removeLabel = async (req: Request, res: Response) => {
+    const labelId = req.params.labelId;
+    const entryId = req.params.entryId;
+
+    const entryRepository = await getRepository(Entry);
+    const labelRepository = await getRepository(Label);
+
+    try {
+      const entry = await entryRepository.findOneOrFail(entryId);
+      const label = await labelRepository.findOneOrFail(labelId);
+      try {
+        await getConnection().createQueryBuilder().relation(Entry, "labels").of(entry).remove(label);
+      } catch (error) {
+        send202(res);
+      }
+      res.send({
+        data: entry
+      });
+    } catch (error) {
+      send404(res);
+    }
+  }
+  */
+
+  export async function processLabel(mode: string, req: Request, res: Response) {
+    const labelId = req.params.labelId;
+    const entryId = req.params.entryId;
+
+    const entryRepository = await getRepository(Entry);
+    const labelRepository = await getRepository(Label);
+
+    try {
+      const entry = await entryRepository.findOneOrFail(entryId);
+      const label = await labelRepository.findOneOrFail(labelId);
+      try {
+        const rel = getConnection().createQueryBuilder().relation(Entry, "labels").of(entry)
+        switch (mode) {
+          case 'addLabel':
+            await rel.add(label);
+            break;
+          case 'removeLabel':
+            await rel.remove(label);
+            break;
+          default:
+            break;
         }
       } catch (error) {
-        console.log(error)
-        send404(res);
+        send202(res);
       }
-
-
-      // localhost:3000/api/entry/addLabel/entryId/labelId
-
+      res.send({
+        data: entry
+      });
+    } catch (error) {
+      send404(res);
+    }
   }
-*/
-
-export const addLabel = async (req: Request, res: Response) => {
-  const labelId = req.params.labelId;
-  const entryId = req.params.entryId;
-
-  const entryRepository = await getRepository(Entry);
-  const labelRepository = await getRepository(Label);
-
-  try {
-    const entry = await entryRepository.findOneOrFail(entryId);
-    const label = await labelRepository.findOneOrFail(labelId);
-    await getConnection().createQueryBuilder().relation(Entry, "labels").of(entry).add(label);
-    res.send({
-      data: entry
-    });
-  } catch (error) {
-    console.log(error);
-    send404(res);
-  }
-}
