@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router } from 'express';
 import { getLabel, getLabels, createLabel, deleteLabel, patchLabel } from '../controller/label.controller';
 
 export const labelRouter = Router({ mergeParams: true });

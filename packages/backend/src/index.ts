@@ -1,4 +1,4 @@
-// tslint:disable-next-line: no-var-requires
+// eslint:disable-next-line: no-var-requires
 require('dotenv-safe').config();
 import 'reflect-metadata';
 import express from 'express';

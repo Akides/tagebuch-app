@@ -1,4 +1,4 @@
-import React, { Children, ReactNode } from "react";
+import React, { ReactNode } from "react";
 import styleCard from "./Card.module.css"
 
 type CardProps = {
@@ -10,7 +10,8 @@ type CardProps = {
 
 export const Card: React.VFC<CardProps> = ({children, labels, date, weekday}) => 
     {
-        const labels_2 = labels.map((label) => <li>{label}</li>)
+
+        const labels_2 = labels.map((label) => <li key={label}>{label}</li>)    //need to provide key for react
 
         return (
             <div className={styleCard.root}>
