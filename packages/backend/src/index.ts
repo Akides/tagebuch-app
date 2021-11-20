@@ -6,16 +6,13 @@ import { createDatabaseConnection } from './util/createDatabaseConnection';
 import * as bodyParser from 'body-parser';
 import { globalRouter } from './router/global.router';
 
-
 const port: number = Number(process.env.PORT);
 
 export const startServer = async () => {
   try {
     const app = express();
     const dbConnection = await createDatabaseConnection();
-
     app.use(bodyParser.json());
-
     app.use('/api', globalRouter);
 
 

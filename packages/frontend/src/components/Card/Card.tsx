@@ -11,7 +11,7 @@ type CardProps = {
 export const Card: React.VFC<CardProps> = ({children, labels, date, weekday}) => 
     {
 
-        const labels_2 = labels.map((label) => <li key={label}>{label}</li>)    //need to provide key for react
+        const labels_2 = labels.map((label) => <li key={label}>{label}</li>)    //provide key for react
 
         return (
             <div className={styleCard.root}>

@@ -5,6 +5,8 @@ import { send404 } from "../util/responses";
 
 
 export const createDay = async (req: Request, res: Response) => {
+    
+    
     const day = new Day();
     day.date = req.body.date;
     day.weekday = req.body.weekday;
