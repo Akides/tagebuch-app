@@ -1,8 +1,11 @@
 /* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import React, { useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import { Card } from "./components/Card/Card";
+import { Theme } from "./Themes"
+
+
 
 
 export interface JokeResponse {
@@ -38,7 +41,7 @@ export const App = () => {
   },[]);
 
   return (
-  <div className="main">
+  <Theme>
     <section className="Cards">
       <Card date="25" weekday="mon" labels={["important","cool"]}>What am I going to do?</Card>
       <Card date="27" weekday="wed" labels={["unimportant","uncool"]}>I have done nothing?</Card>
@@ -47,7 +50,7 @@ export const App = () => {
 
     <button onClick={onButtonClickHandler}>Click here!</button>
     <input type="text" onChange={onInputChangeHandler} />
-  </div>
+  </Theme>
   )
 };
 
