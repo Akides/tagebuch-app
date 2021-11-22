@@ -1,11 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 
-export const Sidebar: React.VFC = () => {
+const Wrapper = styled.div`
+float: left;
+`;
 
-    const Wrapper = styled.div`
-        float: left;
-    `;
+export const Sidebar: React.VFC = () => {
 
     return (
         <Wrapper>

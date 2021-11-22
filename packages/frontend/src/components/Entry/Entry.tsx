@@ -9,13 +9,14 @@ type EntryProps = {
     weekday: string
 }
 
-export const Entry: React.VFC<EntryProps> = ({children, title, labels, date, weekday}) => {
-    const Wrapper = styled.div`
-        border: ${props => props.theme.sizes.borderWidth} solid ${props => props.theme.colors.fontColor};
+const Wrapper = styled.div`
+border: ${props => props.theme.sizes.borderWidth} solid ${props => props.theme.colors.fontColor};
 
-        padding: 15px;
-        overflow: hidden;
-    `;
+padding: 15px;
+overflow: hidden;
+`;
+
+export const Entry: React.VFC<EntryProps> = ({children, title, labels, date, weekday}) => {
     
     return (
         <Wrapper>
