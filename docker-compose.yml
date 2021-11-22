@@ -34,6 +34,16 @@ services:
     environment:
       - PMA_ARBITRARY=1
 
+  frontend:
+    image: node:13
+    working_dir: /var/app/frontend
+    ports:
+      - 3002:3002
+    command: npm start
+    stdin_open: true
+    volumes:
+      - ./packages/frontend:/var/app/frontend
+
 
 volumes:
   node_modules:

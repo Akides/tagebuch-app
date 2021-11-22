@@ -10,6 +10,7 @@ const port: number = Number(process.env.PORT);
 
 export const startServer = async () => {
   try {
+
     const app = express();
     const dbConnection = await createDatabaseConnection();
     app.use(bodyParser.json());

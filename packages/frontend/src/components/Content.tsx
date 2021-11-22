@@ -1,13 +1,50 @@
-import { Theme } from "../Themes"
+/* eslint-disable prefer-const */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
-import React from "react";
+import React, { Fragment, ReactNode, useEffect, useState } from "react";
 import { Mainbar } from "./Mainbar";
 import { Sidebar } from "./Sidebar";
 import { Entry } from "./Entry/Entry";
+import { Theme } from "../Themes"
+import { GlobalStyle } from "../globalStyles";
+
+export interface JokeResponse {
+    type: string;
+    value: Value;
+  }
+  
+  export interface Value {
+    id: number;
+    joke: string;
+    categories: any[];
+  }
 
 export const Content: React.VFC = () => {
+
+    //const [cards, setCards] = useState("Diary entries could not be loaded");
+
+    
+
+    const [joke, setJoke] = useState<JokeResponse | null>(null);
+    const fetchJoke = async () => {
+      const jokeRequest = await fetch("http://api.icndb.com/jokes/random");
+      const jokeJson = (await jokeRequest.json()) as JokeResponse;
+      setJoke(jokeJson);
+      //console.log(jokeJson.value.joke)
+    };
+  
+    useEffect(() => {
+      // credentials for testing purposes
+      const serverAddr = 'http://localhost:3000';
+      let rows = [];
+      fetchJoke();
+    },[]);
+
     return (
         <Theme>
+            <p>{joke !== null ? joke.value.joke : ""}</p>
+            <button onClick={onButtonClickHandler}>Click here!</button>
+            <input type="text" onChange={onInputChangeHandler} /> 
             <Sidebar/>
             <Mainbar/>
             <Entry title="nice title" labels={["important, cool"]} date="22.11.2021" weekday="Monday">
@@ -20,3 +57,11 @@ export const Content: React.VFC = () => {
         </Theme>
     );
 };
+
+function onButtonClickHandler() {
+    console.log("clicked");
+  }
+  
+  function onInputChangeHandler(e: React.ChangeEvent<HTMLInputElement>){
+    console.log(e.target.value); 
+}
