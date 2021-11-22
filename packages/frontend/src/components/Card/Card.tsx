@@ -16,8 +16,11 @@ export const Card: React.VFC<CardProps> = ({children, title, labels, date, weekd
         const Wrapper = styled.div`
             border-style: solid;
             border-color: ${props => props.theme.colors.fontColor};
-            padding: 1em;
-            margin: 1em;
+            border-width: ${props => props.theme.sizes.borderWidth};
+            padding: 15px;
+            margin: 15px;
+            margin-top: 0;
+            display: flex;
         `;
 
         const Date = styled.div`
@@ -25,7 +28,7 @@ export const Card: React.VFC<CardProps> = ({children, title, labels, date, weekd
             text-align: center;
             border: 0.1em solid ${props => props.theme.colors.borderColor};
             border-radius: 10%;
-            padding: 0.2em;
+            padding: 14px 6px;
             float: left;
             font-weight: bold;
         `;
@@ -36,7 +39,7 @@ export const Card: React.VFC<CardProps> = ({children, title, labels, date, weekd
 
         const Title = styled.div`
             color: black;
-            font-size: 2em;
+            font-size: 20px;
         `;
 
         const Description = styled.div`
@@ -55,8 +58,8 @@ export const Card: React.VFC<CardProps> = ({children, title, labels, date, weekd
             margin-right: 5px;
             border: 0.1em solid ${props => props.theme.colors.borderColor};
             border-radius: 10%;
-            
-            
+            padding-left: 3px;
+            padding-right: 3px;
         `;
 
         const labels_arr = labels.map((label) => <Label key={label}>{label}</Label>)    //provide key for react

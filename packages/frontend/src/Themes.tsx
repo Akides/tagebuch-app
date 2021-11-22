@@ -12,6 +12,9 @@ const theme = {
       shadowColor: "rgba(0, 0, 0, 0.3)",
       listBackgroundColor: "rgb(45, 45, 45)",
     },
+    sizes: {
+      borderWidth: "1.5px"
+    }
   };
   
   export const Theme = ({ children }:{children: ReactNode}) => (
