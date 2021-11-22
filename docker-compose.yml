@@ -20,7 +20,9 @@ services:
     ports:
       - 3000:3000
       - 9229:9229
-    command: npm start
+    depends_on:
+      - db
+    command: bash -c 'while !</dev/tcp/db/3306; do sleep 1; done; npm start'
     volumes:
       - ./packages/backend:/var/app/backend
       - node_modules:/var/app/backend/node_modules

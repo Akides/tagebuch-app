@@ -6,7 +6,7 @@ import { dayRouter } from "./day.router";
 export const globalRouter = Router({ mergeParams: true});
 
 globalRouter.get('/', async (_: Request, res: Response) => {
-    res.send('Hallo welt');
+    res.send('Welcome to API');
   });
 globalRouter.use('/label', labelRouter);
 globalRouter.use('/entry', entryRouter);

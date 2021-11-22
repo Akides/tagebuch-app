@@ -40,6 +40,14 @@ export const Content: React.VFC = () => {
       fetchJoke();
     },[]);
 
+    useEffect(() => {
+      (async function () {
+        const cardsRequest = await fetch("/api");
+        const cardJson = await cardsRequest.json();
+        console.log(cardJson);
+      })();
+    });
+
     return (
         <Theme>
             <p>{joke !== null ? joke.value.joke : ""}</p>
