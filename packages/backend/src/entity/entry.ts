@@ -1,5 +1,4 @@
-import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { Day } from "./day";
+import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Label } from "./label";
 
 @Entity()
@@ -22,8 +21,16 @@ export class Entry {
     @Column({nullable: true})
     imgURL: string;
 
+    /*
     @ManyToOne(() => Day, (day) => day.entries)
     day: Day;
+    */
+
+    @Column()
+    date: string;
+
+    @Column()
+    weekday: string;
 
     @ManyToMany(() => Label, label => label.entries)
     @JoinTable()

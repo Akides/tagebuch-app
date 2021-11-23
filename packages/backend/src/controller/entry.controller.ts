@@ -5,21 +5,43 @@ import { Label } from '../entity/label';
 import { send202, send404 } from '../util/responses';
 
 export const createEntry = async (req: Request, res: Response) => {
-    const entry = new Entry();
-    const entryRepository = await getRepository(Entry);
-    entry.title = req.body.title;
+  /*
+  const dayRepository = await getRepository(Day);
+  const day = await dayRepository.findOne(req.body.date);
+  console.log(day);
+  if (day == null) {
+    console.log("TEEEEEEEEEEE");
+    const day = new Day();
+    day.date = req.body.date;
+    day.weekday = req.body.weekday;
     try {
-      const createdLabel = await entryRepository.save(entry);
-
-      res.send({
-        data: createdLabel
-      });
+      await dayRepository.save(day);
     } catch (error) {
         send404(res);
     }
+  }
+  */
+
+  const entry = new Entry();
+  const entryRepository = await getRepository(Entry);
+  entry.title = req.body.title;
+  entry.date = req.body.date;
+  entry.content = req.body.content;
+  entry.weekday = req.body.weekday;
+  try {
+    const createdEntry = await entryRepository.save(entry).catch((error) => {
+      console.error(error);
+    });
+    res.send({
+      data: createdEntry
+    });
+  } catch (error) {
+      send404(res);
+  }
 }
 
 export const getEntries = async (_:Request, res: Response) => {
+  
     const entryRepository = await getRepository(Entry);
     try {
         const entries = await entryRepository.find();
@@ -63,7 +85,7 @@ export const deleteEntry = async (req:Request, res: Response) => {
     const title = req.body.title;
     const content = req.body.content;
     const imgURL = req.body.imgURL;
-    const day = req.body.day;
+    const date = req.body.date;
   
     const entryRepository = await getRepository(Entry);
   
@@ -72,7 +94,7 @@ export const deleteEntry = async (req:Request, res: Response) => {
       entry.title = title;
       entry.content = content;
       entry.imgURL = imgURL;
-      entry.day = day;  //foreign key
+      entry.date = date;  //foreign key
       try {
           await entryRepository.save(entry);
       } catch (error) {

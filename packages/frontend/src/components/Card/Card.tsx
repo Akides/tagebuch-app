@@ -8,7 +8,8 @@ type CardProps = {
     labels: string[],
     children?: ReactNode,
     date: string,
-    weekday: string
+    weekday: string,
+    onClick: any
 }
 
 const Wrapper = styled.div`
@@ -60,14 +61,14 @@ padding-left: 3px;
 padding-right: 3px;
 `;
 
-export const Card: React.VFC<CardProps> = ({children, title, labels, date, weekday}) => 
+export const Card: React.VFC<CardProps> = ({children, title, labels, date, weekday, onClick}) => 
     {
 
 
         const labels_arr = labels.map((label) => <Label key={label}>{label}</Label>)    //provide key for react
 
         return (
-            <Wrapper>
+            <Wrapper onClick={onClick}>
                 <Date>
                     <div>{date}</div> 
                     <div>{weekday}</div>
