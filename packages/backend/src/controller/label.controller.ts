@@ -29,6 +29,13 @@ export const getLabels = async (_: Request, res: Response) => {
     });
 };
 
+/* Example sql query:
+SELECT entry_labels_label.labelId
+FROM label
+LEFT JOIN entry_labels_label ON label.id = entry_labels_label.labelId
+WHERE entry_labels_label.entryId = '0bca3d9e-6a2f-480d-b797-e3e85e14d57c'
+*/
+
 //create new label
 export const createLabel = async (req: Request, res: Response) => {
     const label = new Label();

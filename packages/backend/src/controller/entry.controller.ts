@@ -108,11 +108,12 @@ export const deleteEntry = async (req:Request, res: Response) => {
     }
   }
 
-  /*
+  
   export const addLabel = async (req: Request, res: Response) => {
     const labelId = req.params.labelId;
     const entryId = req.params.entryId;
-
+    console.log(labelId);
+    console.log(entryId);
     const entryRepository = await getRepository(Entry);
     const labelRepository = await getRepository(Label);
 
@@ -132,7 +133,8 @@ export const deleteEntry = async (req:Request, res: Response) => {
     }
   }
 
-  const removeLabel = async (req: Request, res: Response) => {
+  
+  export const removeLabel = async (req: Request, res: Response) => {
     const labelId = req.params.labelId;
     const entryId = req.params.entryId;
 
@@ -154,7 +156,26 @@ export const deleteEntry = async (req:Request, res: Response) => {
       send404(res);
     }
   }
-  */
+  
+
+  export const getLabels = async (req: Request, res: Response) => {
+    const entryId = req.params.req;
+    const entryRepository = await getRepository(Entry);
+
+    try {
+      const entry = await entryRepository.findOneOrFail(entryId);
+      try {
+        const labels = await getConnection().createQueryBuilder().relation(Entry, "labels").of(entry).loadMany();
+        res.send({
+          data: labels
+        });
+      } catch (error) {
+        send202(res);
+      }
+    } catch (error) {
+      send404(res);
+    }
+  }
 
   export async function processLabel(mode: string, req: Request, res: Response) {
     const labelId = req.params.labelId;
