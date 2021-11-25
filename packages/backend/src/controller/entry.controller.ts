@@ -44,9 +44,11 @@ export const getEntries = async (_:Request, res: Response) => {
   
     const entryRepository = await getRepository(Entry);
     try {
-        const entries = await entryRepository.find();
+        const entries = await entryRepository.createQueryBuilder("entry")
+        .leftJoinAndSelect("entry.labels", "label")
+        .getMany();
         res.send({
-            data: entries
+            data: entries,
         });
     } catch (error) {
         send404(res);
@@ -163,9 +165,10 @@ export const deleteEntry = async (req:Request, res: Response) => {
     const entryRepository = await getRepository(Entry);
 
     try {
-      const entry = await entryRepository.findOneOrFail(entryId);
+       const entry = await entryRepository.findOneOrFail(entryId);
       try {
         const labels = await getConnection().createQueryBuilder().relation(Entry, "labels").of(entry).loadMany();
+
         res.send({
           data: labels
         });
@@ -174,7 +177,7 @@ export const deleteEntry = async (req:Request, res: Response) => {
       }
     } catch (error) {
       send404(res);
-    }
+    } 
   }
 
   export async function processLabel(mode: string, req: Request, res: Response) {

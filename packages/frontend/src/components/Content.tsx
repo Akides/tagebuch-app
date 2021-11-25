@@ -14,16 +14,19 @@ import styled from "styled-components";
   `;
 
 function onClickHandler(card: any) {
-  const [entry, setEntry] = useState<JSX.Element | null>(null);
 
+  const entryFunc = () => {
 
-  const title = card["title"];
-  const content = card["content"];
-  const date = card["date"];
-  const weekday = card["weekday"];
-  const id = card["id"];
+    const [entry, setEntry] = useState<JSX.Element | null>(null);
 
-  setEntry(<Entry key={id} title={title} labels={[]} date="" weekday=""></Entry>);
+    const title = card["title"];
+    const content = card["content"];
+    const date = card["date"];
+    const weekday = card["weekday"];
+    const id = card["id"];
+    setEntry(<Entry key={id} title={title} labels={[]} date="" weekday=""></Entry>);
+  };
+
 }
 
 export const Content: React.VFC = () => {
@@ -40,22 +43,21 @@ export const Content: React.VFC = () => {
         let cardsArr = [];
         for (let i = 0; i < data.length; i++) {
           const card = data[i];
-          const title = card["title"];
-          const content = card["content"];
-          const date = card["date"];
-          const weekday = card["weekday"];
-          const id = card["id"];
-          cardsArr.push(<Card key={id} title={title} date={date} weekday={weekday} labels={["important","cool"]} onClick={onClickHandler.bind((typeof(Card)), data[i], setEntry)}>{content}</Card>);
+          const labels = card["labels"];
+          let labelNames = [];
+          let labelColors = [];
+          console.log(labels)
+          for (let i = 0; i < labels.length; i++) {
+            const label = labels[i];
+            labelNames.push(label["name"]);
+            labelColors.push(label["color"]);
+          }
+          //console.log(labelNames);
+          cardsArr.push(<Card key={card["id"]} title={card["title"]} date={card["date"]} weekday={card["weekday"]} labels={labelNames} onClick={() => {console.log("geklickt")}}>{card["content"]}</Card>);
         }
         setCards(cardsArr);
       })();
     },[]);
-
-    /*useEffect(() => {
-      (async function () {
-        console.log("Enbtry");
-      })();
-    },[entry]);*/
 
     return (
         <Theme>
