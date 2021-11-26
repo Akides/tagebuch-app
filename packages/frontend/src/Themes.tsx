@@ -7,7 +7,7 @@ const theme = {
       primary: "rgb(128, 161, 155)",
       backgroundColor: "#202020",
       fontColor: "#474747",
-      borderColor: "#858585",
+      borderColor: "#ddd",
       secondaryFontColor: "rgb(191, 191, 191)",
       shadowColor: "rgba(0, 0, 0, 0.3)",
       listBackgroundColor: "rgb(45, 45, 45)",

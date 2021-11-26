@@ -13,9 +13,9 @@ type CardProps = {
 }
 
 const Wrapper = styled.div`
-border-style: solid;
-border-color: ${props => props.theme.colors.fontColor};
-border-width: ${props => props.theme.sizes.borderWidth};
+width: 350px;
+height: px;
+border-bottom: ${props => props.theme.sizes.borderWidth} solid ${props => props.theme.colors.borderColor};
 padding: 15px;
 margin: 15px;
 margin-top: 0;
@@ -33,7 +33,7 @@ font-weight: bold;
 `;
 
 const Writings = styled.div`
-margin-left: 60px;  
+margin-left: 40px;  
 `;
 
 const Title = styled.div`
@@ -42,7 +42,11 @@ font-size: 20px;
 `;
 
 const Description = styled.div`
+width: 11em;
 color: ${props => props.theme.colors.fontColor};
+white-space:nowrap;
+text-overflow: ellipsis;
+overflow: hidden;
 `;
 
 const Labels = styled.div`

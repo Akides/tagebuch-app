@@ -11,23 +11,9 @@ import styled from "styled-components";
 
   const Mainbar = styled.div`
     float: left;
+    border-right: #ddd 2px solid;
+    padding-bottom: 100%;
   `;
-
-function onClickHandler(card: any) {
-
-  const entryFunc = () => {
-
-    const [entry, setEntry] = useState<JSX.Element | null>(null);
-
-    const title = card["title"];
-    const content = card["content"];
-    const date = card["date"];
-    const weekday = card["weekday"];
-    const id = card["id"];
-    setEntry(<Entry key={id} title={title} labels={[]} date="" weekday=""></Entry>);
-  };
-
-}
 
 export const Content: React.VFC = () => {
   const [cards, setCards] = useState<JSX.Element[] | null>(null);
@@ -57,9 +43,12 @@ export const Content: React.VFC = () => {
             labelColors.push(label["color"]);
           }
           cardsArr.push(<Card key={id} title={title} date={date} weekday={weekday} labels={labelNames} onClick={async () => {
-            const entryComp = <Entry title={title} labels={labelNames} date={date} weekday={weekday}>{card["content"]}</Entry>
+            const res = await fetch(`/api/entry/${id}`);
+            const resJson = await res.json();
+            const entry = resJson["data"];
+            const entryComp = <Entry key={id} id={id} title={entry["title"]} labels={labelNames} date={entry["date"]} weekday={entry["weekday"]}>{entry["content"]}</Entry>
             setEntry(entryComp);
-          }}>{card["content"]}</Card>);
+          }}></Card>);
         }
         setCards(cardsArr);
       })();
@@ -77,7 +66,7 @@ export const Content: React.VFC = () => {
 };
 
 function onButtonClickHandler() {
-    console.log("clicked");
+    console.log("click");
   }
   
   function onInputChangeHandler(e: React.ChangeEvent<HTMLInputElement>){
