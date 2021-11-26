@@ -13,7 +13,8 @@ const theme = {
       listBackgroundColor: "rgb(45, 45, 45)",
     },
     sizes: {
-      borderWidth: "1.5px"
+      borderWidth: "1.5px",
+      fontSize: "20px"
     }
   };
   

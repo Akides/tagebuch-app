@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { ReactNode, useState } from "react";
 import styled from "styled-components";
 
 type EntryProps = {
@@ -16,7 +16,9 @@ const Wrapper = styled.div`
 `;
 
 const Content = styled.div`
+    font-size: ${props => props.theme.sizes.fontSize};
     padding-bottom: 10px;
+    white-space: pre-wrap;
 `;
 
 const Descr = styled.div`
@@ -31,8 +33,11 @@ const EditButton = styled.button`
 
 /* editable = true */
 
-const InputContent = styled.input`
-    border: 5px solid;
+const InputContent = styled.textarea`
+    border: 1px solid ${props => props.theme.colors.borderColor};
+    font-size: ${props => props.theme.sizes.fontSize};
+    width: 100%;
+    height: 500px;
 `;
 
 async function handleOnClick(input: string, id: string) {
@@ -62,8 +67,8 @@ export const Entry: React.VFC<EntryProps> = ({children, id, title, labels, date,
                 setEditable(false);
             }}>Edit done</EditButton>
             <InputContent value={input} onChange={e => {
-                setInput((e.target as HTMLInputElement).value);
-            }} type="text" />
+                setInput((e.target as HTMLTextAreaElement).value);
+            }} ></InputContent>
             <Descr>
                 <div>{labels}</div>
                 <div>{weekday}</div>
