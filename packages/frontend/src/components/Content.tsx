@@ -41,19 +41,25 @@ export const Content: React.VFC = () => {
         const cardJson = await cardsRequest.json();
         const data = cardJson["data"];
         let cardsArr = [];
+
         for (let i = 0; i < data.length; i++) {
           const card = data[i];
           const labels = card["labels"];
-          let labelNames = [];
-          let labelColors = [];
-          console.log(labels)
+          const id = card["id"];
+          const title = card["title"];
+          const date = card["date"];
+          const weekday = card["weekday"];
+          let labelNames: string[] = [];
+          let labelColors: string[] = [];
           for (let i = 0; i < labels.length; i++) {
             const label = labels[i];
             labelNames.push(label["name"]);
             labelColors.push(label["color"]);
           }
-          //console.log(labelNames);
-          cardsArr.push(<Card key={card["id"]} title={card["title"]} date={card["date"]} weekday={card["weekday"]} labels={labelNames} onClick={() => {console.log("geklickt")}}>{card["content"]}</Card>);
+          cardsArr.push(<Card key={id} title={title} date={date} weekday={weekday} labels={labelNames} onClick={async () => {
+            const entryComp = <Entry title={title} labels={labelNames} date={date} weekday={weekday}>{card["content"]}</Entry>
+            setEntry(entryComp);
+          }}>{card["content"]}</Card>);
         }
         setCards(cardsArr);
       })();

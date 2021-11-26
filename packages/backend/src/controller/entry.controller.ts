@@ -60,7 +60,10 @@ export const getEntry = async (req: Request, res: Response) => {
     const entryRepository = await getRepository(Entry);
 
     try {
-        const entry = await entryRepository.findOneOrFail(entryId);
+      const entry = await entryRepository.createQueryBuilder("entry")
+      .leftJoinAndSelect("entry.labels", "label")
+      .where("entry.id = :id", { id: entryId })
+      .getOneOrFail();
         res.send({
             data: entry
         });
