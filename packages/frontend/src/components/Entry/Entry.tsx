@@ -1,4 +1,5 @@
 import React, { ReactNode, useState } from "react";
+import ReactMarkdown from "react-markdown";
 import styled from "styled-components";
 
 type EntryProps = {
@@ -58,13 +59,13 @@ const EditTitle = styled.textarea`
 `;
 
 async function handleOnClick(title: string, input: string, id: string) {
-    const req = await fetch(`/api/entry/${id}`, {
+    await fetch(`/api/entry/${id}`, {
                     headers: { "Content-Type": "application/json; charset=utf-8" },
                     method: 'PATCH',
                     body: JSON.stringify({
                         title: title,
                         content: input
-                })
+        })
     })
 }
 
@@ -104,7 +105,7 @@ export const Entry: React.VFC<EntryProps> = ({onClickFunc, children, id, title, 
                 setEditable(true);
             }}>Edit</EditButton>
             <h2>{inputTitle}</h2>
-            <Content>{input}</Content>
+            <ReactMarkdown>{input}</ReactMarkdown>
             <Descr>
                 <div>{labels}</div>
                 <div>{weekday}</div>

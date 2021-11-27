@@ -1,4 +1,5 @@
 import React, { ReactNode } from "react";
+import ReactMarkdown from "react-markdown";
 import styled from "styled-components";
 
 
@@ -6,7 +7,7 @@ import styled from "styled-components";
 type CardProps = {
     title: string,
     labels: string[],
-    children?: ReactNode,
+    children: ReactNode,
     date: string,
     weekday: string,
     onClick: any
@@ -68,7 +69,6 @@ padding-right: 3px;
 export const Card: React.VFC<CardProps> = ({children, title, labels, date, weekday, onClick}) => 
     {
 
-
         const labels_arr = labels.map((label) => <Label key={label}>{label}</Label>)    //provide key for react
 
         return (
@@ -79,7 +79,11 @@ export const Card: React.VFC<CardProps> = ({children, title, labels, date, weekd
                 </Date>
                 <Writings>
                     <Title>{title}</Title>
-                    <Description className="descr">{children}</Description>
+                    <Description className="descr">
+                        <ReactMarkdown>
+                            {children as string}
+                        </ReactMarkdown>
+                    </Description>
                     <Labels>
                         {labels_arr}
                     </Labels>
