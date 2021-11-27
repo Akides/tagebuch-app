@@ -5,22 +5,7 @@ import { Label } from '../entity/label';
 import { send202, send404 } from '../util/responses';
 
 export const createEntry = async (req: Request, res: Response) => {
-  /*
-  const dayRepository = await getRepository(Day);
-  const day = await dayRepository.findOne(req.body.date);
-  console.log(day);
-  if (day == null) {
-    console.log("TEEEEEEEEEEE");
-    const day = new Day();
-    day.date = req.body.date;
-    day.weekday = req.body.weekday;
-    try {
-      await dayRepository.save(day);
-    } catch (error) {
-        send404(res);
-    }
-  }
-  */
+
 
   const entry = new Entry();
   const entryRepository = await getRepository(Entry);
@@ -53,6 +38,22 @@ export const getEntries = async (_:Request, res: Response) => {
     } catch (error) {
         send404(res);
     }
+}
+
+export const getEntriesSorted = async (_:Request, res: Response) => {
+  
+  const entryRepository = await getRepository(Entry);
+  try {
+      const entries = await entryRepository.createQueryBuilder("entry")
+      .leftJoinAndSelect("entry.labels", "label")
+      .orderBy('entry.date', 'ASC')
+      .getMany();
+      res.send({
+          data: entries,
+      });
+  } catch (error) {
+      send404(res);
+  }
 }
 
 export const getEntry = async (req: Request, res: Response) => {

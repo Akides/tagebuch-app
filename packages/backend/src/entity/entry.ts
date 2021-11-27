@@ -21,13 +21,8 @@ export class Entry {
     @Column({nullable: true})
     imgURL: string;
 
-    /*
-    @ManyToOne(() => Day, (day) => day.entries)
-    day: Day;
-    */
-
-    @Column()
-    date: string;
+    @Column('datetime')
+    date: Date;
 
     @Column()
     weekday: string;
