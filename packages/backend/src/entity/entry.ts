@@ -24,9 +24,6 @@ export class Entry {
     @Column('datetime')
     date: Date;
 
-    @Column()
-    weekday: string;
-
     @ManyToMany(() => Label, label => label.entries)
     @JoinTable()
     labels: Label[];

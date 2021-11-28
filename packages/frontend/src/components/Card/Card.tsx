@@ -1,6 +1,7 @@
 import React, { ReactNode } from "react";
 import ReactMarkdown from "react-markdown";
 import styled from "styled-components";
+import { mapDateToWeekday } from "../../util/Util";
 import { Label } from "../Label";
 
 
@@ -9,7 +10,7 @@ type CardProps = {
     title: string,
     labels: any[],
     children: ReactNode,
-    date: string,
+    day: string,
     weekday: string,
     onClick: any
 }
@@ -63,15 +64,17 @@ font-size: small;
 
 
 
-export const Card: React.VFC<CardProps> = ({children, title, labels, date, weekday, onClick}) => 
+export const Card: React.VFC<CardProps> = ({children, title, labels, day, weekday, onClick}) => 
     {
+        
+
         const labels_arr = labels.map((label: any) =>
             <Label key={label["id"]}>{label["name"]}</Label>)
 
         return (
             <Wrapper onClick={onClick}>
                 <Date>
-                    <div>{date}</div> 
+                    <div>{day}</div> 
                     <div>{weekday}</div>
                 </Date>
                 <Writings>

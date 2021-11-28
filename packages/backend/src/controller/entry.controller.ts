@@ -12,7 +12,6 @@ export const createEntry = async (req: Request, res: Response) => {
   entry.title = req.body.title;
   entry.date = req.body.date;
   entry.content = req.body.content;
-  entry.weekday = req.body.weekday;
   try {
     const createdEntry = await entryRepository.save(entry).catch((error) => {
       console.error(error);

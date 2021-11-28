@@ -1,6 +1,7 @@
 import React, { ReactNode, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import styled from "styled-components";
+import { mapDateToWeekday, mapDayToWeekday } from "../../util/Util";
 import { Label } from "../Label";
 
 type EntryProps = {
@@ -9,7 +10,6 @@ type EntryProps = {
     labels: any[],
     children?: ReactNode,
     date: string,
-    weekday: string,
     onClickFunc: any
 }
 
@@ -59,13 +59,18 @@ const EditTitle = styled.textarea`
     font-weight: bold;
 `;
 
-async function handleOnClick(title: string, input: string, id: string) {
+const EditDate = styled.textarea`
+    
+`;
+
+async function handleOnClick(title: string, input: string, id: string, date: string) {
     await fetch(`/api/entry/${id}`, {
                     headers: { "Content-Type": "application/json; charset=utf-8" },
                     method: 'PATCH',
                     body: JSON.stringify({
                         title: title,
-                        content: input
+                        content: input,
+                        date: date
         })
     })
 }
@@ -73,19 +78,23 @@ async function handleOnClick(title: string, input: string, id: string) {
 
 
 
-export const Entry: React.VFC<EntryProps> = ({onClickFunc, children, id, title, labels, date, weekday }) => {
+export const Entry: React.VFC<EntryProps> = ({onClickFunc, children, id, title, labels, date }) => {
     const [editable, setEditable] = useState(false);
     const [input, setInput] = useState(children as string);
     const [inputTitle, setInputTitle] = useState(title);
+    const [inputDate, setInputDate] = useState(date);
+    const [inputWeekday, setInputWeekday] = useState(mapDateToWeekday(date));
 
     const labels_arr = labels.map((label: any) =>
             <Label key={label["id"]}>{label["name"]}</Label>)
+
     
     if (editable) {
         return (
         <Wrapper>
             <EditButton onClick={() => {
-                handleOnClick(inputTitle as string, input as string, id);
+                handleOnClick(inputTitle as string, input as string, id, inputDate);
+                setInputWeekday(mapDateToWeekday(inputDate));
                 onClickFunc();
                 setEditable(false);
             }}>Edit done</EditButton>
@@ -97,8 +106,10 @@ export const Entry: React.VFC<EntryProps> = ({onClickFunc, children, id, title, 
             }} ></InputContent>
             <Descr>
                 <div>{labels_arr}</div>
-                <div>{weekday}</div>
-                <div>{date}</div>
+                <div>{inputWeekday}</div>
+                <EditDate value={inputDate} onChange={e => {
+                setInputDate((e.target as HTMLTextAreaElement).value);
+            }}>{date}</EditDate>
             </Descr>
         </Wrapper>
         );
@@ -116,7 +127,7 @@ export const Entry: React.VFC<EntryProps> = ({onClickFunc, children, id, title, 
             </Content>
             <Descr>
                 <div>{labels_arr}</div>
-                <div>{weekday} {date}</div>
+                <div>{inputWeekday} {inputDate}</div>
             </Descr>
         </Wrapper>
     );

@@ -8,6 +8,7 @@ import { Theme } from "../Themes"
 import { GlobalStyle } from "../globalStyles";
 import { Card } from "./Card/Card";
 import styled from "styled-components";
+import { mapDateToWeekday, mapDayToWeekday } from "../util/Util";
 
   const Mainbar = styled.div`
     float: left;
@@ -15,7 +16,7 @@ import styled from "styled-components";
     padding-bottom: 100%;
   `;
 
-  const Date = styled.div`
+  const StyledDate = styled.div`
     font-weight: bold;
   `;
 
@@ -45,7 +46,7 @@ export const Content: React.VFC = () => {
         const firstDate = data[0]["date"];
         let lastYear: string = firstDate.substring(0,4);
         let lastMonth: string = firstDate.substring(5,7);
-        cardsArr.push(<Date key={firstDate}>{lastMonth}-{lastYear}</Date>);
+        cardsArr.push(<StyledDate key={firstDate}>{lastMonth}-{lastYear}</StyledDate>);
 
         for (let i = 0; i < data.length; i++) {
           const card = data[i];
@@ -61,13 +62,13 @@ export const Content: React.VFC = () => {
           const day = dateParts[2];
           
           if ((year != lastYear) || (year == lastYear && month != lastMonth)) {
-            cardsArr.push(<Date key={date}>{month}-{year}</Date>);
+            cardsArr.push(<StyledDate key={date}>{month}-{year}</StyledDate>);
           }
 
           lastYear = year;
           lastMonth = month;
+          console.log(new Date(date).getDay());
 
-          const weekday = card["weekday"];
           let labelNames: string[] = [];
           let labelColors: string[] = [];
           let labelsArr: any = [];
@@ -77,16 +78,21 @@ export const Content: React.VFC = () => {
             labelNames.push(label["name"]);
             labelColors.push(label["color"]);
           }
-          const cardComp = <Card key={id} title={title} date={day} weekday={weekday} labels={labelsArr} onClick={async () => {
+
+          const cardComp = <Card key={id} title={title} day={day} weekday={mapDateToWeekday(date)} labels={labelsArr} onClick={async () => {
             const res = await fetch(`/api/entry/${id}`);
             const resJson = await res.json();
             const entry = resJson["data"];
-            const entryComp = <Entry key={id} id={id} title={entry["title"]} labels={labelsArr} date={realDate} onClickFunc={rerender} weekday={entry["weekday"]}>{entry["content"]}</Entry>
+            const dateObj = new Date(entry["date"]);
+            const entryComp = <Entry key={id} id={id} title={entry["title"]} labels={labelsArr} date={realDate} onClickFunc={rerender}>{entry["content"]}</Entry>
             setEntry(entryComp);
           }}>{card["content"]}</Card>
           cardsArr.push(cardComp);
         }
         //cardsArr.forEach((card: any) => {console.log(card)});
+        if (cardsArr.length == 0) {
+          cardsArr.push(<div>no cards loaded.</div>)
+        }
         setCards(cardsArr);
         setRender(false);
       })();
@@ -112,4 +118,3 @@ function handleAddButtonClick(){
 function onInputChangeHandler(e: React.ChangeEvent<HTMLInputElement>){
     console.log(e.target.value);
 }
-
