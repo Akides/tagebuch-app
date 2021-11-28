@@ -1,11 +1,12 @@
 import React, { ReactNode, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import styled from "styled-components";
+import { Label } from "../Label";
 
 type EntryProps = {
     id: string,
     title: string,
-    labels: string[],
+    labels: any[],
     children?: ReactNode,
     date: string,
     weekday: string,
@@ -76,6 +77,9 @@ export const Entry: React.VFC<EntryProps> = ({onClickFunc, children, id, title, 
     const [editable, setEditable] = useState(false);
     const [input, setInput] = useState(children as string);
     const [inputTitle, setInputTitle] = useState(title);
+
+    const labels_arr = labels.map((label: any) =>
+            <Label key={label["id"]}>{label["name"]}</Label>)
     
     if (editable) {
         return (
@@ -92,7 +96,7 @@ export const Entry: React.VFC<EntryProps> = ({onClickFunc, children, id, title, 
                 setInput((e.target as HTMLTextAreaElement).value);
             }} ></InputContent>
             <Descr>
-                <div>{labels}</div>
+                <div>{labels_arr}</div>
                 <div>{weekday}</div>
                 <div>{date}</div>
             </Descr>
@@ -105,11 +109,14 @@ export const Entry: React.VFC<EntryProps> = ({onClickFunc, children, id, title, 
                 setEditable(true);
             }}>Edit</EditButton>
             <h2>{inputTitle}</h2>
-            <ReactMarkdown>{input}</ReactMarkdown>
+            <Content>
+                <ReactMarkdown>
+                    {input}
+                </ReactMarkdown>
+            </Content>
             <Descr>
-                <div>{labels}</div>
-                <div>{weekday}</div>
-                <div>{date}</div>
+                <div>{labels_arr}</div>
+                <div>{weekday} {date}</div>
             </Descr>
         </Wrapper>
     );
