@@ -18,6 +18,6 @@ const theme = {
     }
   };
   
-  export const Theme = ({ children }:{children: ReactNode}) => (
+  export const Theme = ({ children }:{children: ReactNode}):JSX.Element => (
     <ThemeProvider theme={theme}>{children}</ThemeProvider>
   );

@@ -8,7 +8,7 @@ import { Theme } from "../Themes"
 import { GlobalStyle } from "../globalStyles";
 import { Card } from "./Card/Card";
 import styled from "styled-components";
-import { mapDateToWeekday, mapDayToWeekday } from "../util/Util";
+import { mapDateToWeekday, mapMonthToStr } from "../util/Util";
 
   const Mainbar = styled.div`
     float: left;
@@ -18,6 +18,10 @@ import { mapDateToWeekday, mapDayToWeekday } from "../util/Util";
 
   const StyledDate = styled.div`
     font-weight: bold;
+    margin: 10px;
+    margin-top: 30px;
+    padding-bottom: 5px;
+    border-bottom: ${props => props.theme.sizes.borderWidth} solid ${props => props.theme.colors.borderColor};
   `;
 
 
@@ -36,9 +40,14 @@ export const Content: React.VFC = () => {
     setRender(true);
   }
 
+
+function handleAddButtonClick():void{
+  console.log("test");
+  
+}
+
     useEffect(() => {
       (async function () {
-
         //request cards
         const cardsRequest = await fetch("/api/entry/sorted");
         const cardJson = await cardsRequest.json();
@@ -46,7 +55,7 @@ export const Content: React.VFC = () => {
         const firstDate = data[0]["date"];
         let lastYear: string = firstDate.substring(0,4);
         let lastMonth: string = firstDate.substring(5,7);
-        cardsArr.push(<StyledDate key={firstDate}>{lastMonth}-{lastYear}</StyledDate>);
+        cardsArr.push(<StyledDate key={firstDate}>{mapMonthToStr(lastMonth)} {lastYear}</StyledDate>);
 
         for (let i = 0; i < data.length; i++) {
           const card = data[i];
@@ -62,15 +71,15 @@ export const Content: React.VFC = () => {
           const day = dateParts[2];
           
           if ((year != lastYear) || (year == lastYear && month != lastMonth)) {
-            cardsArr.push(<StyledDate key={date}>{month}-{year}</StyledDate>);
+            cardsArr.push(<StyledDate key={date}>{mapMonthToStr(month)} {year}</StyledDate>);
           }
 
           lastYear = year;
           lastMonth = month;
-          console.log(new Date(date).getDay());
 
           let labelNames: string[] = [];
           let labelColors: string[] = [];
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           let labelsArr: any = [];
           for (let j = 0; j < labels.length; j++) {
             const label = labels[j];
@@ -89,7 +98,6 @@ export const Content: React.VFC = () => {
           }}>{card["content"]}</Card>
           cardsArr.push(cardComp);
         }
-        //cardsArr.forEach((card: any) => {console.log(card)});
         if (cardsArr.length == 0) {
           cardsArr.push(<div>no cards loaded.</div>)
         }
@@ -110,11 +118,7 @@ export const Content: React.VFC = () => {
     );
 };
 
-function handleAddButtonClick(){
-  console.log("test");
-
-}
   
-function onInputChangeHandler(e: React.ChangeEvent<HTMLInputElement>){
+function onInputChangeHandler(e: React.ChangeEvent<HTMLInputElement>):void{
     console.log(e.target.value);
 }

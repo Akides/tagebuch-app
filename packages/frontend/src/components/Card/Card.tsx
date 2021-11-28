@@ -1,29 +1,33 @@
 import React, { ReactNode } from "react";
 import ReactMarkdown from "react-markdown";
 import styled from "styled-components";
-import { mapDateToWeekday } from "../../util/Util";
 import { Label } from "../Label";
 
 
 
 type CardProps = {
     title: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     labels: any[],
     children: ReactNode,
     day: string,
     weekday: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onClick: any
 }
 
 const Wrapper = styled.div`
 width: 350px;
 height: 70px;
-border-bottom: ${props => props.theme.sizes.borderWidth} solid ${props => props.theme.colors.borderColor};
+//border-top: ${props => props.theme.sizes.borderWidth} solid ${props => props.theme.colors.borderColor};
 padding: 5px;
 padding-bottom: 30px;
 margin: 10px;
 margin-top: 0;
 display: flex;
+&:hover {
+    background-color: #e9e9e9;
+  }
 `;
 
 const Date = styled.div`
@@ -67,7 +71,7 @@ font-size: small;
 export const Card: React.VFC<CardProps> = ({children, title, labels, day, weekday, onClick}) => 
     {
         
-
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const labels_arr = labels.map((label: any) =>
             <Label key={label["id"]}>{label["name"]}</Label>)
 

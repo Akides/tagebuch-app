@@ -7,14 +7,19 @@ import { Label } from "../Label";
 type EntryProps = {
     id: string,
     title: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     labels: any[],
     children?: ReactNode,
     date: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onClickFunc: any
 }
 
 const Wrapper = styled.div`
-    padding: 15px;
+    position: fixed;
+    width: 70%;
+    margin-left: 400px;
+    padding: 50px;
     overflow: hidden;
 `;
 
@@ -84,7 +89,7 @@ export const Entry: React.VFC<EntryProps> = ({onClickFunc, children, id, title, 
     const [inputTitle, setInputTitle] = useState(title);
     const [inputDate, setInputDate] = useState(date);
     const [inputWeekday, setInputWeekday] = useState(mapDateToWeekday(date));
-
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     const labels_arr = labels.map((label: any) =>
             <Label key={label["id"]}>{label["name"]}</Label>)
 

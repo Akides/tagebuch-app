@@ -1,4 +1,4 @@
-export function mapDayToWeekday(dayNum: number) {
+export function mapDayToWeekday(dayNum: number):string {
   let dayStr = "";
   switch (dayNum) {
     case 0:
@@ -29,7 +29,7 @@ export function mapDayToWeekday(dayNum: number) {
   return dayStr;
 }
 
-export function mapDateToWeekday(date: string) {
+export function mapDateToWeekday(date: string):string {
     let dayStr = "";
     //console.log(new Date(date).getDay());
     switch (new Date(date).getDay()) {
@@ -54,6 +54,53 @@ export function mapDateToWeekday(date: string) {
       case 6:
         dayStr = 'SUN';
         break;
+      default:
+        dayStr = 'NOT_AVAILABLE';
+        break;
+    }
+    return dayStr;
+  }
+
+  export function mapMonthToStr(month: string):string {
+    let dayStr = "";
+    //console.log(new Date(date).getDay());
+    switch (month) {
+        case "01":
+            dayStr = 'January';
+            break;
+        case "02":
+            dayStr = 'February';
+            break;
+        case "03":
+            dayStr = 'March';
+            break;
+        case "04":
+            dayStr = 'April';
+            break;
+        case "05":
+            dayStr = 'May';
+            break;
+        case "06":
+            dayStr = 'June';
+            break;
+            case "07":
+            dayStr = 'July';
+            break;
+        case "08":
+            dayStr = 'August';
+            break;
+        case "09":
+            dayStr = 'September';
+            break;
+        case "10":
+            dayStr = 'October';
+            break;
+        case "11":
+            dayStr = 'November';
+            break;
+        case "12":
+            dayStr = 'December';
+            break;
       default:
         dayStr = 'NOT_AVAILABLE';
         break;
