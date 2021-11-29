@@ -1,7 +1,7 @@
 import React, { ReactNode, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import styled from "styled-components";
-import { mapDateToWeekday, mapDayToWeekday } from "../../util/Util";
+import { mapDateToWeekday } from "../../util/Util";
 import { Label } from "../Label";
 
 type EntryProps = {
@@ -12,7 +12,8 @@ type EntryProps = {
     children?: ReactNode,
     date: string,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    onClickFunc: any
+    onClickFunc: any,
+    edit: boolean
 }
 
 const Wrapper = styled.div`
@@ -68,23 +69,45 @@ const EditDate = styled.textarea`
     
 `;
 
-async function handleOnClick(title: string, input: string, id: string, date: string) {
-    await fetch(`/api/entry/${id}`, {
-                    headers: { "Content-Type": "application/json; charset=utf-8" },
-                    method: 'PATCH',
+const RemoveButton = styled.button`
+    color: ${props => props.theme.colors.fontColor};
+    float: right;
+  `;
+
+async function handleOnClickInsert(title: string, input: string, id: string, date: string) {
+    const response = await fetch(`/api/entry/${id}`, {
+                        headers: { "Content-Type": "application/json; charset=utf-8" },
+                        method: 'PATCH',
+                        body: JSON.stringify({
+                            title: title,
+                            content: input,
+                            date: date
+                        })
+                    });
+    if (response.status == 404) {
+        await fetch(`/api/entry`, {
+            headers: { "Content-Type": "application/json; charset=utf-8" },
+                    method: 'POST',
                     body: JSON.stringify({
                         title: title,
                         content: input,
                         date: date
-        })
-    })
+                    })
+        });
+    }
+}
+
+async function handleOnClickRemove(id: string) {
+    await fetch(`/api/entry/${id}`, {
+        method: 'DELETE'
+    });
 }
 
 
 
 
-export const Entry: React.VFC<EntryProps> = ({onClickFunc, children, id, title, labels, date }) => {
-    const [editable, setEditable] = useState(false);
+export const Entry: React.VFC<EntryProps> = ({onClickFunc, edit, children, id, title, labels, date }) => {
+    const [editable, setEditable] = useState(edit);
     const [input, setInput] = useState(children as string);
     const [inputTitle, setInputTitle] = useState(title);
     const [inputDate, setInputDate] = useState(date);
@@ -98,11 +121,11 @@ export const Entry: React.VFC<EntryProps> = ({onClickFunc, children, id, title, 
         return (
         <Wrapper>
             <EditButton onClick={() => {
-                handleOnClick(inputTitle as string, input as string, id, inputDate);
+                handleOnClickInsert(inputTitle as string, input as string, id, inputDate);
                 setInputWeekday(mapDateToWeekday(inputDate));
                 onClickFunc();
                 setEditable(false);
-            }}>Edit done</EditButton>
+            }}>save</EditButton>
             <EditTitle value={inputTitle} onChange={e => {
                 setInputTitle((e.target as HTMLTextAreaElement).value);
             }}></EditTitle>
@@ -116,6 +139,10 @@ export const Entry: React.VFC<EntryProps> = ({onClickFunc, children, id, title, 
                 setInputDate((e.target as HTMLTextAreaElement).value);
             }}>{date}</EditDate>
             </Descr>
+            <RemoveButton onClick={() => {
+                handleOnClickRemove(id);
+                onClickFunc();
+            }}>Remove</RemoveButton>
         </Wrapper>
         );
     }

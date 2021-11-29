@@ -19,7 +19,6 @@ type CardProps = {
 const Wrapper = styled.div`
 width: 350px;
 height: 70px;
-//border-top: ${props => props.theme.sizes.borderWidth} solid ${props => props.theme.colors.borderColor};
 padding: 5px;
 padding-bottom: 30px;
 margin: 10px;
@@ -27,7 +26,7 @@ margin-top: 0;
 display: flex;
 &:hover {
     background-color: #e9e9e9;
-  }
+}
 `;
 
 const Date = styled.div`

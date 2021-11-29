@@ -41,9 +41,15 @@ export const Content: React.VFC = () => {
   }
 
 
-function handleAddButtonClick():void{
+function setNewEntry():void {
+  const today = new Date();
+  const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+  const entryComp = <Entry key={'unsaved'} id={'unsaved'} edit={true} title="" labels={[]} date={date} onClickFunc={rerender}></Entry>
+  setEntry(entryComp);
+}
+
+function handleRemoveButtonClick():void {
   console.log("test");
-  
 }
 
     useEffect(() => {
@@ -52,6 +58,7 @@ function handleAddButtonClick():void{
         const cardsRequest = await fetch("/api/entry/sorted");
         const cardJson = await cardsRequest.json();
         const data = cardJson["data"];
+        // TODO: catch for if there is no card!
         const firstDate = data[0]["date"];
         let lastYear: string = firstDate.substring(0,4);
         let lastMonth: string = firstDate.substring(5,7);
@@ -92,8 +99,7 @@ function handleAddButtonClick():void{
             const res = await fetch(`/api/entry/${id}`);
             const resJson = await res.json();
             const entry = resJson["data"];
-            const dateObj = new Date(entry["date"]);
-            const entryComp = <Entry key={id} id={id} title={entry["title"]} labels={labelsArr} date={realDate} onClickFunc={rerender}>{entry["content"]}</Entry>
+            const entryComp = <Entry key={id} id={id} edit={false} title={entry["title"]} labels={labelsArr} date={realDate} onClickFunc={rerender}>{entry["content"]}</Entry>
             setEntry(entryComp);
           }}>{card["content"]}</Card>
           cardsArr.push(cardComp);
@@ -111,7 +117,7 @@ function handleAddButtonClick():void{
             <Sidebar/>
             <Mainbar>
               {cards}
-              <AddButton onClick={handleAddButtonClick}>Add</AddButton>
+              <AddButton onClick={setNewEntry}>Add</AddButton>
             </Mainbar>
             {entry}
         </Theme>

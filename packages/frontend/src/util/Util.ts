@@ -31,8 +31,9 @@ export function mapDayToWeekday(dayNum: number):string {
 
 export function mapDateToWeekday(date: string):string {
     let dayStr = "";
-    //console.log(new Date(date).getDay());
-    switch (new Date(date).getDay()) {
+    let weekday = new Date(date).getDay()-1;
+    weekday = ((weekday % 7) + 7) % 7
+    switch (weekday) {
       case 0:
         dayStr = 'MON';
         break;

@@ -73,10 +73,11 @@ export const getEntry = async (req: Request, res: Response) => {
 }
 
 export const deleteEntry = async (req:Request, res: Response) => {
-    const entryId = req.params.labelId;
+    const entryId = req.params.entryId;
     const entryRepository = await getRepository(Entry);
   
     try {
+      //console.log(entryId);
       const entry = await entryRepository.findOneOrFail(entryId);
       await entryRepository.remove(entry);
       res.send({});
