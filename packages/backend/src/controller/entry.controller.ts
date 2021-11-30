@@ -3,8 +3,6 @@ import { getConnection, getRepository } from "typeorm";
 import { Entry } from "../entity/entry";
 import { Label } from '../entity/label';
 import { send202, send404 } from '../util/responses';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const { Parser } = require('../../json2csv');
 
 export const createEntry = async (req: Request, res: Response) => {
 
@@ -41,6 +39,8 @@ export const getEntries = async (_:Request, res: Response) => {
     }
 }
 
+
+
 export const getEntriesSorted = async (_:Request, res: Response) => {
   
   const entryRepository = await getRepository(Entry);
@@ -49,6 +49,8 @@ export const getEntriesSorted = async (_:Request, res: Response) => {
       .leftJoinAndSelect("entry.labels", "label")
       .orderBy('entry.date', 'ASC')
       .getMany();
+
+
       res.send({
           data: entries,
       });
@@ -281,16 +283,8 @@ export const deleteEntry = async (req:Request, res: Response) => {
       .orderBy('entry.date', 'ASC')
       .getMany();
 
-      const fields = ['field1', 'field2', 'field3'];
-      const opts = { fields };
-
-      try {
-      const parser = new Parser(opts);
-      const csv = parser.parse(entries);
-      console.log(csv);
-      } catch (err) {
-      console.error(err);
-      }
+      console.log(entries);
+      
       res.sendFile('./entries.csv');
     } catch (error) {
         send404(res);
