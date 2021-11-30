@@ -18,8 +18,8 @@ type EntryProps = {
 
 const Wrapper = styled.div`
     position: fixed;
-    width: 70%;
-    margin-left: 400px;
+    width: 50%;
+    margin-left: 650px;
     padding: 50px;
     overflow: hidden;
 `;
@@ -30,7 +30,7 @@ const Content = styled.div`
     white-space: pre-wrap;
     width: 100%;
     height: 500px;
-    overflow: scroll;
+    overflow-y: scroll;
     &:focus {
         border-color: blueviolet;
         box-shadow: 0px 0px 2px red;
