@@ -51,7 +51,7 @@ font-size: 18px;
 const Description = styled.div`
 font-size: 15px;
 width: 11em;
-height: 30px;
+height: 50px;
 color: ${props => props.theme.colors.fontColor};
 white-space:nowrap;
 text-overflow: ellipsis;

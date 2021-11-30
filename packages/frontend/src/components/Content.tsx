@@ -19,11 +19,13 @@ import 'react-dropdown/style.css';
   `;
 
   const Sidebar = styled.div`
+    width: 270px;
     position: fixed;
     float: left;
     background-color: #1b1b1b;
     border-right: #ddd 2px solid;
     padding-bottom: 100%;
+    align-items: center;
   `;
 
   const StyledDate = styled.div`
@@ -36,13 +38,23 @@ import 'react-dropdown/style.css';
 
 
   const AddButton = styled.button`
-    color: ${props => props.theme.colors.fontColor};
-    float: right;
+    background-color: #4c98af; /* Green */
+    border: none;
+    border-radius: 50px;
+    color: white;
+    padding: 5px 100px;
+    margin: auto;
+    text-align: center;
+    text-decoration: none;
+    display: flex;
+    font-size: 16px;
   `;
 
   const SearchInput = styled.input`
-    margin: 12px;
+    display: flex;
+    margin: 12px auto;
     font-size: 15px;
+    border-radius: 50px;
   `;
 
 
@@ -192,10 +204,10 @@ function construct(cardJson: any) {
               <SearchInput type="text" placeholder="Search entries, labels" onKeyPress={e => {
                   if (e.key == 'Enter') searchCards((e.target as HTMLInputElement).value, selectedOption);
                 }} />
+              <AddButton onClick={setNewEntry}>Add</AddButton>
             </Sidebar>
             <Mainbar>
               {cards}
-              <AddButton onClick={setNewEntry}>Add</AddButton>
             </Mainbar>
             {entry}
         </Theme>

@@ -1,9 +1,10 @@
 import { Router } from "express";
-import { addLabel, createEntry, deleteEntry, getEntries, getEntriesByDate, getEntriesByInput, getEntriesByLabel, getEntriesSorted, getEntry, getLabels, patchEntry, removeLabel } from '../controller/entry.controller';
+import { addLabel, createEntry, deleteEntry, getEntries, getEntriesByDate, getEntriesByInput, getEntriesByLabel, getEntriesCSV, getEntriesSorted, getEntry, getLabels, patchEntry, removeLabel } from '../controller/entry.controller';
 
 export const entryRouter = Router({ mergeParams: true });
 entryRouter.post('/', createEntry);
 entryRouter.get('/', getEntries);
+entryRouter.get('/csv', getEntriesCSV);
 entryRouter.get('/sorted', getEntriesSorted);
 entryRouter.get('/:entryId', getEntry);
 entryRouter.delete('/:entryId', deleteEntry);
