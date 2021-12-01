@@ -1,9 +1,10 @@
-import React, { ReactNode, useState } from "react";
+import React, { Fragment, ReactNode, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import styled from "styled-components";
 import { mapDateToWeekday } from "../util/Util";
 import { AiFillEdit, AiOutlineCheck, AiOutlinePlus } from "react-icons/ai";
 import Chip from '@mui/material/Chip';
+import { Link } from 'react-router-dom';
 
 
 type EntryProps = {
@@ -15,7 +16,8 @@ type EntryProps = {
     date: string,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onClickFunc: any,
-    edit: boolean
+    edit: boolean,
+    preview: boolean
 }
 
 const Wrapper = styled.div`
@@ -105,7 +107,7 @@ function handleLabelDelete():void {
     console.log("test");
 }
 
-export const Entry: React.VFC<EntryProps> = ({onClickFunc, edit, children, id, title, labels, date }) => {
+export const Entry: React.VFC<EntryProps> = ({onClickFunc, edit, children, id, title, labels, date, preview }) => {
     const [editable, setEditable] = useState(edit);
     const [input, setInput] = useState(children as string);
     const [inputTitle, setInputTitle] = useState(title);
@@ -114,6 +116,8 @@ export const Entry: React.VFC<EntryProps> = ({onClickFunc, edit, children, id, t
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
     let labels_arr: any;
+    let linkTo: JSX.Element = <div></div>;
+    if (preview) linkTo = <Link to={"/entryview/"+id}>HIER LINK</Link>;
     
     if (editable) {
         labels_arr = labels.map((label: any) =>
@@ -154,6 +158,7 @@ export const Entry: React.VFC<EntryProps> = ({onClickFunc, edit, children, id, t
 
     return (
         <Wrapper>
+            {linkTo}
            <AiFillEdit color="#474747" size="28px" style={{margin: '20px', float: "right"}} onClick={() => {
                 setEditable(true);
             }}/>
