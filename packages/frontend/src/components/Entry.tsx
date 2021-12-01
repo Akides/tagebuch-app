@@ -1,7 +1,7 @@
 import React, { ReactNode, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import styled from "styled-components";
-import { mapDateToWeekday } from "../../util/Util";
+import { mapDateToWeekday } from "../util/Util";
 import { AiFillEdit, AiOutlineCheck, AiOutlinePlus } from "react-icons/ai";
 import Chip from '@mui/material/Chip';
 

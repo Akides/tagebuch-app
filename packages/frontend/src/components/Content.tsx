@@ -2,14 +2,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import React, { useEffect, useState } from "react";
-import { Entry } from "./Entry/Entry";
+import { Entry } from "./Entry";
 import { Theme } from "../Themes"
-import { Card } from "./Card/Card";
+import { Card } from "./Card";
 import styled from "styled-components";
 import { mapDateToWeekday, mapMonthToStr } from "../util/Util";
 import Dropdown from "react-dropdown";
 import 'react-dropdown/style.css';
 import {LabelSidebar} from "./LabelSidebar";
+
 
   const Mainbar = styled.div`
     background-color: #f8f8f8;
