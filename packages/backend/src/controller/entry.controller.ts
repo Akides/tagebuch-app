@@ -6,10 +6,8 @@ import { send202, send404 } from '../util/responses';
 //import { Parser } from 'json2csv';
 
 export const createEntry = async (req: Request, res: Response) => {
-
-
   const entry = new Entry();
-  const entryRepository = await getRepository(Entry);
+  const entryRepository = getRepository(Entry);
   entry.title = req.body.title;
   entry.date = req.body.date;
   entry.content = req.body.content;
@@ -27,7 +25,7 @@ export const createEntry = async (req: Request, res: Response) => {
 
 export const getEntries = async (_:Request, res: Response) => {
   
-    const entryRepository = await getRepository(Entry);
+    const entryRepository = getRepository(Entry);
     try {
         const entries = await entryRepository.createQueryBuilder("entry")
         .leftJoinAndSelect("entry.labels", "label")
@@ -44,7 +42,7 @@ export const getEntries = async (_:Request, res: Response) => {
 
 export const getEntriesSorted = async (_:Request, res: Response) => {
   
-  const entryRepository = await getRepository(Entry);
+  const entryRepository = getRepository(Entry);
   try {
       const entries = await entryRepository.createQueryBuilder("entry")
       .leftJoinAndSelect("entry.labels", "label")
@@ -64,7 +62,7 @@ export const getEntriesSorted = async (_:Request, res: Response) => {
 export const getEntriesByInput = async (req:Request, res: Response) => {
   const input = req.params.input;
 
-  const entryRepository = await getRepository(Entry);
+  const entryRepository = getRepository(Entry);
   try {
       const entries = await entryRepository.createQueryBuilder("entry")
       .leftJoinAndSelect("entry.labels", "label")
@@ -82,7 +80,7 @@ export const getEntriesByInput = async (req:Request, res: Response) => {
 export const getEntriesByLabel = async (req:Request, res: Response) => {
   const input = req.params.input;
 
-  const entryRepository = await getRepository(Entry);
+  const entryRepository = getRepository(Entry);
   try {
       const entries = await entryRepository.createQueryBuilder("entry")
       .leftJoinAndSelect("entry.labels", "label")
@@ -101,7 +99,7 @@ export const getEntriesByDate = async (req:Request, res: Response) => {
   const input = req.params.input;
   console.log(input)
 
-  const entryRepository = await getRepository(Entry);
+  const entryRepository = getRepository(Entry);
   try {
       const entries = await entryRepository.createQueryBuilder("entry")
       .leftJoinAndSelect("entry.labels", "label")
@@ -180,8 +178,8 @@ export const deleteEntry = async (req:Request, res: Response) => {
     const entryId = req.params.entryId;
     console.log(labelId);
     console.log(entryId);
-    const entryRepository = await getRepository(Entry);
-    const labelRepository = await getRepository(Label);
+    const entryRepository = getRepository(Entry);
+    const labelRepository = getRepository(Label);
 
     try {
       const entry = await entryRepository.findOneOrFail(entryId);
@@ -204,8 +202,8 @@ export const deleteEntry = async (req:Request, res: Response) => {
     const labelId = req.params.labelId;
     const entryId = req.params.entryId;
 
-    const entryRepository = await getRepository(Entry);
-    const labelRepository = await getRepository(Label);
+    const entryRepository = getRepository(Entry);
+    const labelRepository = getRepository(Label);
 
     try {
       const entry = await entryRepository.findOneOrFail(entryId);
@@ -226,7 +224,7 @@ export const deleteEntry = async (req:Request, res: Response) => {
 
   export const getLabels = async (req: Request, res: Response) => {
     const entryId = req.params.req;
-    const entryRepository = await getRepository(Entry);
+    const entryRepository = getRepository(Entry);
 
     try {
        const entry = await entryRepository.findOneOrFail(entryId);
@@ -248,8 +246,8 @@ export const deleteEntry = async (req:Request, res: Response) => {
     const labelId = req.params.labelId;
     const entryId = req.params.entryId;
 
-    const entryRepository = await getRepository(Entry);
-    const labelRepository = await getRepository(Label);
+    const entryRepository = getRepository(Entry);
+    const labelRepository = getRepository(Label);
 
     try {
       const entry = await entryRepository.findOneOrFail(entryId);
@@ -278,7 +276,7 @@ export const deleteEntry = async (req:Request, res: Response) => {
   }
 
   export async function getEntriesCSV(_: Request, res: Response) {
-    const entryRepository = await getRepository(Entry);
+    const entryRepository = getRepository(Entry);
     try {
       const entries = await entryRepository.createQueryBuilder("entry")
       .leftJoinAndSelect("entry.labels", "label")

@@ -2,8 +2,9 @@ import React, { ReactNode, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import styled from "styled-components";
 import { mapDateToWeekday } from "../../util/Util";
-import { Label } from "../Label";
 import { AiFillEdit, AiOutlineCheck, AiOutlinePlus } from "react-icons/ai";
+import Chip from '@mui/material/Chip';
+
 
 type EntryProps = {
     id: string,
@@ -96,9 +97,13 @@ async function handleOnClickRemove(id: string) {
         method: 'DELETE'
     });
 }
-
-
-
+//TODO: HANDLEDELETE OF LABEL!
+function handleLabelDelete():void {
+    /*await fetch(`/api/entry/${id}`, {
+        method: 'DELETE'
+    });*/
+    console.log("test");
+}
 
 export const Entry: React.VFC<EntryProps> = ({onClickFunc, edit, children, id, title, labels, date }) => {
     const [editable, setEditable] = useState(edit);
@@ -107,15 +112,13 @@ export const Entry: React.VFC<EntryProps> = ({onClickFunc, edit, children, id, t
     const [inputDate, setInputDate] = useState(date);
     const [inputWeekday, setInputWeekday] = useState(mapDateToWeekday(date));
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const labels_arr = labels.map((label: any) =>
-            <Label key={label["id"]} color={label["color"]}>{label["name"]}</Label>)
 
-    if (labels_arr.length == 0) {
-        labels_arr.push(<div key="no_labels">no labels</div>);
-    }
-
+    let labels_arr: any;
     
     if (editable) {
+        labels_arr = labels.map((label: any) =>
+        <Chip key={label["id"]} label={label["name"]} onDelete={handleLabelDelete}/>)
+
         return (
         <Wrapper>
             <AiOutlineCheck color="#747474"size="28px" style={{margin: '20px', float: "right"}} onClick={() => {
@@ -145,6 +148,10 @@ export const Entry: React.VFC<EntryProps> = ({onClickFunc, edit, children, id, t
         </Wrapper>
         );
     }
+
+    labels_arr = labels.map((label: any) =>
+        <Chip key={label["id"]} label={label["name"]} />)
+
     return (
         <Wrapper>
            <AiFillEdit color="#474747" size="28px" style={{margin: '20px', float: "right"}} onClick={() => {

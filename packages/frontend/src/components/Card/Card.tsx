@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 import ReactMarkdown from "react-markdown";
 import styled from "styled-components";
-import { Label } from "../Label";
+import Chip from '@mui/material/Chip';
 
 
 
@@ -74,8 +74,7 @@ export const Card: React.VFC<CardProps> = ({children, title, labels, day, weekda
     {
         
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const labels_arr = labels.map((label: any) =>
-            <Label key={label["id"]} color={label["color"]}>{label["name"]}</Label>)
+        const labels_arr = labels.map((label: any) => <Chip key={label["id"]} label={label["name"]} size={"small"}/>)
 
         return (
             <Wrapper onClick={onClick}>
