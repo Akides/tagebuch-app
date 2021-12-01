@@ -3,6 +3,7 @@ import { getConnection, getRepository } from "typeorm";
 import { Entry } from "../entity/entry";
 import { Label } from '../entity/label';
 import { send202, send404 } from '../util/responses';
+//import { Parser } from 'json2csv';
 
 export const createEntry = async (req: Request, res: Response) => {
 
@@ -89,7 +90,7 @@ export const getEntriesByLabel = async (req:Request, res: Response) => {
       .orderBy('entry.date', 'ASC')
       .getMany();
       res.send({
-          data: entries,
+          data: entries
       });
   } catch (error) {
       send404(res);
@@ -116,7 +117,7 @@ export const getEntriesByDate = async (req:Request, res: Response) => {
 
 export const getEntry = async (req: Request, res: Response) => {
     const entryId = req.params.entryId;
-    const entryRepository = await getRepository(Entry);
+    const entryRepository = getRepository(Entry);
 
     try {
       const entry = await entryRepository.createQueryBuilder("entry")
@@ -133,7 +134,7 @@ export const getEntry = async (req: Request, res: Response) => {
 
 export const deleteEntry = async (req:Request, res: Response) => {
     const entryId = req.params.entryId;
-    const entryRepository = await getRepository(Entry);
+    const entryRepository = getRepository(Entry);
   
     try {
       //console.log(entryId);
@@ -152,7 +153,7 @@ export const deleteEntry = async (req:Request, res: Response) => {
     const imgURL = req.body.imgURL;
     const date = req.body.date;
   
-    const entryRepository = await getRepository(Entry);
+    const entryRepository = getRepository(Entry);
   
     try {
       const entry = await entryRepository.findOneOrFail(entryId);

@@ -1,6 +1,7 @@
 import React, { ReactNode } from "react";
 import styled from "styled-components";
 import {BsThreeDots} from "react-icons/bs";
+import Dropdown from "react-dropdown";
 
 type LabelSidebarProps = {
     color: string,
@@ -20,11 +21,18 @@ const Wrapper = styled.div`
     font-size: 16px;
 `;
 
+const options = [
+    'Entries', 'Label', 'Date'
+  ];
+
+let selectedOption = options[0];
+
 export const LabelSidebar: React.VFC<LabelSidebarProps> = ({color, children }) => {
     return (
         <Wrapper color={color}>
             <div>{children}</div>
             <BsThreeDots style={{color: 'brown', fontSize: '20px', position: 'absolute', right: '30px'}} onClick={() => console.log("clicked")}/>
+            <Dropdown options={options} value={selectedOption} onChange={(e) => selectedOption = e.value} placeholder="Select an option" />
         </Wrapper>
     );
 };

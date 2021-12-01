@@ -3,7 +3,7 @@ import ReactMarkdown from "react-markdown";
 import styled from "styled-components";
 import { mapDateToWeekday } from "../../util/Util";
 import { Label } from "../Label";
-import { AiFillEdit, AiOutlineCheck } from "react-icons/ai";
+import { AiFillEdit, AiOutlineCheck, AiOutlinePlus } from "react-icons/ai";
 
 type EntryProps = {
     id: string,
@@ -110,11 +110,15 @@ export const Entry: React.VFC<EntryProps> = ({onClickFunc, edit, children, id, t
     const labels_arr = labels.map((label: any) =>
             <Label key={label["id"]} color={label["color"]}>{label["name"]}</Label>)
 
+    if (labels_arr.length == 0) {
+        labels_arr.push(<div key="no_labels">no labels</div>);
+    }
+
     
     if (editable) {
         return (
         <Wrapper>
-            <AiOutlineCheck size="28px" style={{margin: '20px', float: "right"}} onClick={() => {
+            <AiOutlineCheck color="#747474"size="28px" style={{margin: '20px', float: "right"}} onClick={() => {
                 handleOnClickInsert(inputTitle as string, input as string, id, inputDate);
                 setInputWeekday(mapDateToWeekday(inputDate));
                 onClickFunc();
@@ -128,6 +132,7 @@ export const Entry: React.VFC<EntryProps> = ({onClickFunc, edit, children, id, t
             }} ></InputContent>
             <Descr>
                 <div>{labels_arr}</div>
+                <AiOutlinePlus size="20px"/>
                 <div>{inputWeekday}</div>
                 <EditDate value={inputDate} onChange={e => {
                 setInputDate((e.target as HTMLTextAreaElement).value);
@@ -142,7 +147,7 @@ export const Entry: React.VFC<EntryProps> = ({onClickFunc, edit, children, id, t
     }
     return (
         <Wrapper>
-           <AiFillEdit size="28px" style={{margin: '20px', float: "right"}} onClick={() => {
+           <AiFillEdit color="#474747" size="28px" style={{margin: '20px', float: "right"}} onClick={() => {
                 setEditable(true);
             }}/>
             <h2>{inputTitle}</h2>

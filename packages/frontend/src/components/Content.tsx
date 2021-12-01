@@ -54,6 +54,7 @@ import {LabelSidebar} from "./LabelSidebar";
   const SearchInput = styled.input`
     display: flex;
     margin: 12px auto;
+    margin-top: 30px;
     font-size: 15px;
     border-radius: 50px;
   `;
@@ -215,8 +216,8 @@ async function constructEntries(cardJson: any) {
     return (
         <Theme>
             <Sidebar>
-              <Dropdown options={options} value={selectedOption} onChange={(e) => selectedOption = e.value} placeholder="Select an option" />;
-              <SearchInput type="text" placeholder="Search entries, labels" onKeyPress={e => {
+              <Dropdown options={options} value={selectedOption} onChange={(e) => selectedOption = e.value} placeholder="Select an option" />
+              <SearchInput type="text" placeholder={getPlaceholder()} onKeyPress={e => {
                   if (e.key == 'Enter') searchCards((e.target as HTMLInputElement).value, selectedOption);
                 }} />
               <AddButton onClick={setNewEntry}>New</AddButton>
@@ -233,4 +234,18 @@ async function constructEntries(cardJson: any) {
   
 function onInputChangeHandler(e: React.ChangeEvent<HTMLInputElement>):void{
     console.log(e.target.value);
+}
+
+function getPlaceholder() {
+  let placeholder = "";
+  if (selectedOption == options[0]) {
+    placeholder =  "search";
+  }
+  if (selectedOption == options[1]) {
+    return "search with labels";
+  }
+  if (selectedOption == options[2]) {
+    return "1997-09-20";
+  }
+  return placeholder;
 }
