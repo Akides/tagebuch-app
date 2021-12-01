@@ -1,4 +1,4 @@
-/* eslint-disable prefer-const */
+
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import React, { useEffect, useState } from "react";
@@ -9,7 +9,6 @@ import styled from "styled-components";
 import { mapDateToWeekday, mapMonthToStr } from "../util/Util";
 import Dropdown from "react-dropdown";
 import 'react-dropdown/style.css';
-import { Label } from "./Label";
 import {LabelSidebar} from "./LabelSidebar";
 
   const Mainbar = styled.div`
@@ -40,7 +39,7 @@ import {LabelSidebar} from "./LabelSidebar";
 
 
   const AddButton = styled.button`
-    background-color: #4c98af; /* Green */
+    background-color:${props => props.theme.colors.elementsColor};
     border: none;
     border-radius: 50px;
     color: white;
@@ -60,7 +59,17 @@ import {LabelSidebar} from "./LabelSidebar";
   `;
 
   const Labels = styled.div`
+      //margin: auto;
+      //display: block;
+  `;
 
+  const StyledHeader = styled.div`
+    margin: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
+    padding: 5px;
+    color: white;
+    border-bottom: 1px solid ${props => props.theme.colors.borderColor};
   `;
 
 
@@ -79,7 +88,7 @@ export const Content: React.VFC = () => {
   const [entry, setEntry] = useState<JSX.Element | null>(null);
   const [labels, setLabels] = useState<JSX.Element[] | null>(null);
   const [render, setRender] = useState(false);
-  let cardsArr : JSX.Element[] = [];
+  const cardsArr : JSX.Element[] = [];
 
 
 
@@ -102,18 +111,19 @@ export const Content: React.VFC = () => {
     }
   
     let cardJson = "";
+    let res: Response;
     if (selectedOption == options[0]) {
-      const res = await fetch(`/api/entry/byInput/${input}`);
+      res = await fetch(`/api/entry/byInput/${input}`);
       cardJson = await res.json();
     }
     
     if (selectedOption == options[1]) {
-      const res = await fetch(`/api/entry/byLabel/${input}`);
+      res = await fetch(`/api/entry/byLabel/${input}`);
       cardJson = await res.json();
     }
     
     if (selectedOption == options[2]) {
-      const res = await fetch(`/api/entry/byDate/${input}`);
+      res = await fetch(`/api/entry/byDate/${input}`);
       cardJson = await res.json();
     }
     
@@ -136,7 +146,7 @@ function handleRemoveButtonClick():void {
         const sidebarLabels = await fetch('/api/label');
         const labelJson = await sidebarLabels.json();
         const labels = labelJson["data"];
-        let labelArr = [];
+        const labelArr = [];
         for (let i = 0; i < labels.length; i++) {
           const label = labels[i];
           labelArr.push(<LabelSidebar key={label["id"]} color={label["color"]}>{label["name"]}</LabelSidebar>);
@@ -156,7 +166,6 @@ async function constructEntries(cardJson: any) {
     setRender(false);
     return;
   }
-  // TODO: catch for if there is no card!
   const firstDate = data[0]["date"];
   let lastYear: string = firstDate.substring(0,4);
   let lastMonth: string = firstDate.substring(5,7);
@@ -182,7 +191,7 @@ async function constructEntries(cardJson: any) {
     lastYear = year;
     lastMonth = month;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let labelsArr: any = [];
+    const labelsArr: any = [];
     for (let j = 0; j < labelsTmp.length; j++) {
       const label = labelsTmp[j];
       labelsArr.push(label);
@@ -210,7 +219,8 @@ async function constructEntries(cardJson: any) {
               <SearchInput type="text" placeholder="Search entries, labels" onKeyPress={e => {
                   if (e.key == 'Enter') searchCards((e.target as HTMLInputElement).value, selectedOption);
                 }} />
-              <AddButton onClick={setNewEntry}>Add</AddButton>
+              <AddButton onClick={setNewEntry}>New</AddButton>
+              <StyledHeader>Labels</StyledHeader>
               <Labels>{labels}</Labels>
             </Sidebar>
             <Mainbar>

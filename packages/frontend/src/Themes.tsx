@@ -6,6 +6,7 @@ const theme = {
     colors: {
       primary: "rgb(128, 161, 155)",
       backgroundColor: "#202020",
+      elementsColor: "#4c98af",
       fontColor: "#474747",
       borderColor: "#ddd",
       secondaryFontColor: "rgb(191, 191, 191)",

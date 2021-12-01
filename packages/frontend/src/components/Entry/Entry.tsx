@@ -3,6 +3,7 @@ import ReactMarkdown from "react-markdown";
 import styled from "styled-components";
 import { mapDateToWeekday } from "../../util/Util";
 import { Label } from "../Label";
+import { AiFillEdit, AiOutlineCheck } from "react-icons/ai";
 
 type EntryProps = {
     id: string,
@@ -41,13 +42,6 @@ const Descr = styled.div`
     color: ${props => props.theme.colors.fontColor};
     border-top: ${props => props.theme.sizes.borderWidth} solid ${props => props.theme.colors.borderColor};
     padding-top: 10px;
-`;
-
-const EditButton = styled.button`
-    height: 30px;
-    margin: 20px;
-    float: right;
-    color: ${props => props.theme.colors.fontColor};
 `;
 
 /* editable = true */
@@ -120,12 +114,12 @@ export const Entry: React.VFC<EntryProps> = ({onClickFunc, edit, children, id, t
     if (editable) {
         return (
         <Wrapper>
-            <EditButton onClick={() => {
+            <AiOutlineCheck size="28px" style={{margin: '20px', float: "right"}} onClick={() => {
                 handleOnClickInsert(inputTitle as string, input as string, id, inputDate);
                 setInputWeekday(mapDateToWeekday(inputDate));
                 onClickFunc();
                 setEditable(false);
-            }}>save</EditButton>
+            }}>save</AiOutlineCheck>
             <EditTitle value={inputTitle} onChange={e => {
                 setInputTitle((e.target as HTMLTextAreaElement).value);
             }}></EditTitle>
@@ -148,9 +142,9 @@ export const Entry: React.VFC<EntryProps> = ({onClickFunc, edit, children, id, t
     }
     return (
         <Wrapper>
-            <EditButton onClick={() => {
+           <AiFillEdit size="28px" style={{margin: '20px', float: "right"}} onClick={() => {
                 setEditable(true);
-            }}>Edit</EditButton>
+            }}/>
             <h2>{inputTitle}</h2>
             <Content>
                 <ReactMarkdown>

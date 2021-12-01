@@ -7,7 +7,8 @@ interface LabelProps {
 }
 
 const Wrapper = styled.div`
-color: ${props => props.color ? props.color : "white"};
+color: black;
+background-color: ${props => props.color ? props.color : "white"};
 float: left;
 margin-right: 5px;
 border: 0.1em solid ${props => props.theme.colors.borderColor};

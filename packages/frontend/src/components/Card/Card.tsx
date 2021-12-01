@@ -46,6 +46,8 @@ margin-left: 40px;
 const Title = styled.div`
 color: black;
 font-size: 18px;
+text-overflow: ellipsis;
+overflow: hidden
 `;
 
 const Description = styled.div`
