@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 import styled from "styled-components";
 
-interface LabelProps {
+type LabelSidebarProps = {
     color: string,
     children: ReactNode
 }
@@ -16,7 +16,7 @@ padding-right: 3px;
 
 `;
 
-export const Label: React.VFC<LabelProps> = ({color, children }) => {
+export const LabelSidebar: React.VFC<LabelSidebarProps> = ({color, children }) => {
     return (
         <Wrapper color={color}>
             <div>{children}</div>

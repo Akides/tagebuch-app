@@ -73,7 +73,7 @@ export const Card: React.VFC<CardProps> = ({children, title, labels, day, weekda
         
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const labels_arr = labels.map((label: any) =>
-            <Label key={label["id"]}>{label["name"]}</Label>)
+            <Label key={label["id"]} color={label["color"]}>{label["name"]}</Label>)
 
         return (
             <Wrapper onClick={onClick}>

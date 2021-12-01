@@ -98,6 +98,7 @@ export const getEntriesByLabel = async (req:Request, res: Response) => {
 
 export const getEntriesByDate = async (req:Request, res: Response) => {
   const input = req.params.input;
+  console.log(input)
 
   const entryRepository = await getRepository(Entry);
   try {

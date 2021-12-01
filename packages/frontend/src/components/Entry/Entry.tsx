@@ -114,7 +114,7 @@ export const Entry: React.VFC<EntryProps> = ({onClickFunc, edit, children, id, t
     const [inputWeekday, setInputWeekday] = useState(mapDateToWeekday(date));
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const labels_arr = labels.map((label: any) =>
-            <Label key={label["id"]}>{label["name"]}</Label>)
+            <Label key={label["id"]} color={label["color"]}>{label["name"]}</Label>)
 
     
     if (editable) {
