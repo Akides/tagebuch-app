@@ -9,8 +9,7 @@ import styled from "styled-components";
 import { mapDateToWeekday, mapMonthToStr } from "../util/Util";
 import Dropdown from "react-dropdown";
 import 'react-dropdown/style.css';
-import {LabelSidebar} from "../components/LabelSidebar";
-import { Button } from "@mui/material";
+import { Button, Chip } from "@mui/material";
 import { Link } from 'react-router-dom';
 
 
@@ -65,6 +64,10 @@ import { Link } from 'react-router-dom';
   const Labels = styled.div`
       //margin: auto;
       //display: block;
+      margin: 20px;
+      border-radius: 5px;
+      background-color: white;
+
   `;
 
   const StyledHeader = styled.div`
@@ -150,7 +153,10 @@ function handleRemoveButtonClick():void {
         const labelArr = [];
         for (let i = 0; i < labels.length; i++) {
           const label = labels[i];
-          labelArr.push(<LabelSidebar key={label["id"]} color={label["color"]}>{label["name"]}</LabelSidebar>);
+          labelArr.push(<Chip label={label["name"]} variant="outlined" 
+          onClick={() => console.log("click")}
+          onDelete={() => console.log("delete")}
+          />);
         }
         setLabels(labelArr);
 
