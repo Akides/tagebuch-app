@@ -136,7 +136,7 @@ export const deleteEntry = async (req:Request, res: Response) => {
     const entryRepository = getRepository(Entry);
   
     try {
-      //console.log(entryId);
+      console.log(entryId);
       const entry = await entryRepository.findOneOrFail(entryId);
       await entryRepository.remove(entry);
       res.send({});
@@ -177,8 +177,6 @@ export const deleteEntry = async (req:Request, res: Response) => {
   export const addLabel = async (req: Request, res: Response) => {
     const labelId = req.params.labelId;
     const entryId = req.params.entryId;
-    console.log(labelId);
-    console.log(entryId);
     const entryRepository = getRepository(Entry);
     const labelRepository = getRepository(Label);
 
@@ -215,7 +213,7 @@ export const deleteEntry = async (req:Request, res: Response) => {
         send202(res);
       }
       res.send({
-        data: entry
+        data: label
       });
     } catch (error) {
       send404(res);

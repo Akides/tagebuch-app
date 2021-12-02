@@ -3,7 +3,8 @@ import ReactMarkdown from "react-markdown";
 import styled from "styled-components";
 import { mapDateToWeekday } from "../util/Util";
 import { AiFillEdit, AiOutlineCheck, AiOutlinePlus, AiOutlineClose } from "react-icons/ai";
-import Chip from '@mui/material/Chip';
+import {Chip, Fab, InputLabel, TextField} from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 import { Navigate } from 'react-router-dom';
 
 
@@ -14,8 +15,6 @@ type EntryDetailedProps = {
     labels: any[],
     children?: ReactNode,
     date: string,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    onClickFunc: any,
     edit: boolean
 }
 
@@ -59,7 +58,7 @@ const InputContent = styled.textarea`
     border: 1px solid ${props => props.theme.colors.borderColor};
     font-size: ${props => props.theme.sizes.fontSize};
     width: 100%;
-    height: 750px;
+    height: 600px;
 `;
 
 const EditTitle = styled.textarea`
@@ -107,37 +106,93 @@ async function handleOnClickRemove(id: string) {
 
 }
 //TODO: HANDLEDELETE OF LABEL!
-function handleLabelDelete():void {
-    /*await fetch(`/api/entry/${id}`, {
-        method: 'DELETE'
-    });*/
-    console.log("test");
+async function handleLabelDelete(id: string, entryId: string) {
+    console.log(id);
+    console.log(entryId);
+    const res = await fetch(`/api/entry/removeLabel/${id}/${entryId}`, {
+                    method: 'DELETE'
+                });
+    if (res.status != 200) {    //label already exists
+        throw new Error("could not delete label.");
+    }
 }
 
-export const EntryDetailed: React.VFC<EntryDetailedProps> = ({onClickFunc, edit, children, id, title, labels, date }) => {
+async function handleLabelAdd(label: string, entryId: string) {
+    let res = await fetch(`/api/label`, {
+        headers: { "Content-Type": "application/json; charset=utf-8" },
+                method: 'POST',
+                body: JSON.stringify({
+                    name: label
+                })
+    });
+
+    if (res.status != 200) {    //label already exists -> load label
+        res = await fetch(`/api/label/getWithName/${label}`, {
+            headers: { "Content-Type": "application/json; charset=utf-8" }, method: 'GET'});
+    }
+
+    const resJson = await res.json();
+    const labelId = resJson["data"]["id"];
+
+    res = await fetch(`/api/entry/addLabel/${labelId}/${entryId}`, {    //add label to entry
+            headers: { "Content-Type": "application/json; charset=utf-8" }, method: 'POST' });
+    
+    if (res.status != 200) {    //entry already has label
+        throw new Error("label with the same name already exists.");
+    }
+}
+
+
+
+
+
+
+export const EntryDetailed: React.VFC<EntryDetailedProps> = ({ edit, children, id, title, labels, date }) => {
     const [editable, setEditable] = useState(edit);
     const [input, setInput] = useState(children as string);
     const [inputTitle, setInputTitle] = useState(title);
     const [inputDate, setInputDate] = useState(date);
     const [inputWeekday, setInputWeekday] = useState(mapDateToWeekday(date));
+    const [inputNewLabel, setInputNewLabel] = useState("");
+    const [labelInfo, setLabelInfo] = useState("");
+    const [labelsToAdd, setLabelsToAdd] = useState([] as string[]);
     const [toCardview, setToCardview] = React.useState(false);
+
+    function handleAddLabelOnClick() {
+        if (!/\S/.test(inputNewLabel)) {  // contains only whitespaces or nothing
+            setLabelInfo("no labels added.");
+        } else { 
+            setLabelInfo(inputNewLabel+" saved. Save and close entry to confirm.");
+            const newLabelToAdd: string[] = labelsToAdd.slice();
+            newLabelToAdd.push(inputNewLabel);
+            setLabelsToAdd(newLabelToAdd);
+            console.log(newLabelToAdd.length);
+        }
+    }
+
 
     if (toCardview === true) {
         return <Navigate to='/cardview'/>
       }
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let labels_arr: any;
+
+    let labels_arr: JSX.Element[];
     
     if (editable) {
         labels_arr = labels.map((label: any) =>
-        <Chip key={label["id"]} label={label["name"]} onDelete={handleLabelDelete}/>)
+        <Chip key={label["id"]} label={label["name"]} onDelete={() => {
+            handleLabelDelete(label["id"], id).catch(error => setLabelInfo(error+"")); 
+            setToCardview(true);
+        }}/>)
 
         return (
         <Wrapper>
             <AiOutlineCheck color="#747474"size="45px" style={{margin: '20px', float: "right"}} onClick={() => {
                 handleOnClickInsert(inputTitle as string, input as string, id, inputDate);
                 setInputWeekday(mapDateToWeekday(inputDate));
-                onClickFunc();
+                for (let i = 0; i < labelsToAdd.length; i++) {
+                    const labelToAdd = labelsToAdd[i];
+                    handleLabelAdd(labelToAdd, id).catch(() => setLabelInfo("label is already assigned."));
+                }
                 setEditable(false);
             }}>save</AiOutlineCheck>
             <EditTitle value={inputTitle} onChange={e => {
@@ -147,8 +202,13 @@ export const EntryDetailed: React.VFC<EntryDetailedProps> = ({onClickFunc, edit,
                 setInput((e.target as HTMLTextAreaElement).value);
             }} ></InputContent>
             <Descr>
+                <TextField size="small" id="outlined-basic" label="new label" variant="outlined" onChange={e => 
+                    setInputNewLabel((e.target as HTMLTextAreaElement).value)}/>
+                <Fab size="small" color="secondary" aria-label="add" onClick={handleAddLabelOnClick}>
+                    <AddIcon />
+                </Fab>
+                <div>{labelInfo}</div>
                 <div>{labels_arr}</div>
-                <AiOutlinePlus size="20px"/>
                 <div>{inputWeekday}</div>
                 <EditDate value={inputDate} onChange={e => {
                 setInputDate((e.target as HTMLTextAreaElement).value);
@@ -156,7 +216,6 @@ export const EntryDetailed: React.VFC<EntryDetailedProps> = ({onClickFunc, edit,
             </Descr>
             <RemoveButton onClick={() => {
                 handleOnClickRemove(id);
-                onClickFunc();
                 setToCardview(true);    // return to cardview page since entry is deleted
             }}>Remove</RemoveButton>
         </Wrapper>
@@ -164,7 +223,11 @@ export const EntryDetailed: React.VFC<EntryDetailedProps> = ({onClickFunc, edit,
     }
 
     labels_arr = labels.map((label: any) =>
-        <Chip key={label["id"]} label={label["name"]} />)
+        <Chip key={label["id"]} label={label["name"]} onClick={() => {
+            handleLabelDelete(label["id"], id);
+            setToCardview(true);
+        }
+    }/>)
 
     return (
         <Wrapper>
@@ -181,6 +244,7 @@ export const EntryDetailed: React.VFC<EntryDetailedProps> = ({onClickFunc, edit,
                 </ReactMarkdown>
             </Content>
             <Descr>
+                <div>{labelInfo}</div>
                 <div>{labels_arr}</div>
                 <div>{inputWeekday} {inputDate}</div>
             </Descr>

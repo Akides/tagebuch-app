@@ -20,6 +20,21 @@ export const getLabel = async (req: Request, res: Response) => {
 
 };
 
+export const getLabelWithName = async (req: Request, res: Response) => {
+  const name = req.params.name;
+  const labelRepository = await getRepository(Label);
+
+  try {         
+      const label = await labelRepository.findOneOrFail({ where: { name: name } }); //should always find one since label.name is unique
+      res.send({
+          data: label,
+      });
+  } catch (e) {
+      send404(res);
+  }
+
+};
+
 //get all labels
 export const getLabels = async (_: Request, res: Response) => {
     const labelRepository = await getRepository(Label);
@@ -57,13 +72,14 @@ export const createLabel = async (req: Request, res: Response) => {
 
 export const deleteLabel = async (req:Request, res: Response) => {
   const labelId = req.params.labelId;
-  const labelRepository = await getRepository(Label);
+  const labelRepository = getRepository(Label);
 
   try {
     const label = await labelRepository.findOneOrFail(labelId);
     await labelRepository.remove(label);
     res.send({});
   } catch (error) {
+    console.log(error);
     send404(res);
   }
 };

@@ -80,6 +80,11 @@ import { Link } from 'react-router-dom';
     border-bottom: 1px solid ${props => props.theme.colors.borderColor};
   `;
 
+  const LabelInfo = styled.div`
+    color: white;
+    margin: 20px;
+  `;
+
 
 const options = [
   'Entries', 'Label', 'Date'
@@ -95,6 +100,7 @@ export const CardsView: React.VFC = () => {
   const [entry, setEntry] = useState<JSX.Element | null>(null);
   const [labels, setLabels] = useState<JSX.Element[] | null>(null);
   const [render, setRender] = useState(false);
+  const [labelInfo, setLabelInfo] = useState("");
   let cardsArr : JSX.Element[] = [];
 
   function rerender() {
@@ -107,6 +113,15 @@ export const CardsView: React.VFC = () => {
     const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
     const entryComp = <Entry key={'unsaved'} id={'unsaved'} edit={true} preview={false} title="" labels={[]} date={date} onClickFunc={rerender}></Entry>
     setEntry(entryComp);
+  }
+
+  async function handleDeleteLabel(id: string) {
+    const res = await fetch(`/api/label/${id}`, {
+                    method: 'DELETE'
+                });
+    if (res.status != 200) {    //label already exists
+        throw new Error("Label still attached to entries.");
+    }
   }
 
   async function searchCards(input: string, selectedOption: string) {
@@ -152,7 +167,7 @@ export const CardsView: React.VFC = () => {
         const cardJson = await res.json();
         constructEntries(cardJson);
       }}
-      onDelete={() => console.log("delete")}
+      onDelete={() => {handleDeleteLabel(labelId).catch(error => setLabelInfo(error+"")); rerender();}}
       />);
     }
     setLabels(labelArr);
@@ -184,6 +199,7 @@ export const CardsView: React.VFC = () => {
     
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function constructEntries(cardJson: any) {
+  cardsArr = [];
   const data = cardJson["data"];
   if (data.length == 0) {
     cardsArr.push(<div key="no_entries">no entries.</div>);
@@ -191,7 +207,6 @@ async function constructEntries(cardJson: any) {
     setRender(false);
     return;
   }
-  cardsArr = [];
   const firstDate = data[0]["date"];
   let lastYear: string = firstDate.substring(0,4);
   let lastMonth: string = firstDate.substring(5,7);
@@ -250,6 +265,7 @@ return (
             <AddButton onClick={setNewEntry}>New</AddButton>
             <StyledHeader>Labels</StyledHeader>
             <Labels>{labels}</Labels>
+            <LabelInfo>{labelInfo}</LabelInfo>
             <Button color="secondary" style={styleButton}>Show All</Button>
             
         </Sidebar>
@@ -257,7 +273,6 @@ return (
             {cards}
         </Mainbar>
         <div>
-            
             {entry}
         </div>
     </Fragment>

@@ -24,7 +24,9 @@ export class Entry {
     @Column('datetime')
     date: Date;
 
-    @ManyToMany(() => Label, label => label.entries)
+    @ManyToMany(() => Label, label => label.entries, {
+        cascade: true
+    })
     @JoinTable()
     labels: Label[];
 

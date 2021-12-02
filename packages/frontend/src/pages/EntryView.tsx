@@ -19,7 +19,7 @@ export const EntryView: React.VFC<EntryViewProps> = () => {
             const res = await fetch(`/api/entry/${id}`);
             const resJson = await res.json();
             const entry = resJson["data"];
-            const entryComp = <EntryDetailed key={id} id={id as string} edit={false} title={entry["title"]} labels={entry["labels"]} date={entry["date"].substring(0,10)} onClickFunc={() => {return}}>{entry["content"]}</EntryDetailed>
+            const entryComp = <EntryDetailed key={id} id={id as string} edit={false} title={entry["title"]} labels={entry["labels"]} date={entry["date"].substring(0,10)}>{entry["content"]}</EntryDetailed>
             setEntry(entryComp);
           })();
     }, []);
