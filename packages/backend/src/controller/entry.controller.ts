@@ -3,7 +3,7 @@ import { getConnection, getRepository } from "typeorm";
 import { Entry } from "../entity/entry";
 import { Label } from '../entity/label';
 import { send202, send404 } from '../util/responses';
-//import { Parser } from 'json2csv';
+import { Parser } from 'json2csv';
 
 export const createEntry = async (req: Request, res: Response) => {
   const entry = new Entry();
@@ -283,6 +283,9 @@ export const deleteEntry = async (req:Request, res: Response) => {
       .getMany();
 
       console.log(entries);
+      const parser = new Parser();
+      const csv = parser.parse(entries);
+      console.log(csv);
       
       res.sendFile('./entries.csv');
     } catch (error) {
