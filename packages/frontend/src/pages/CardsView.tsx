@@ -65,6 +65,7 @@ import { Link } from 'react-router-dom';
       //margin: auto;
       //display: block;
       margin: 20px;
+      padding: 5px;
       border-radius: 5px;
       background-color: white;
 
@@ -94,7 +95,7 @@ export const CardsView: React.VFC = () => {
   const [entry, setEntry] = useState<JSX.Element | null>(null);
   const [labels, setLabels] = useState<JSX.Element[] | null>(null);
   const [render, setRender] = useState(false);
-  const cardsArr : JSX.Element[] = [];
+  let cardsArr : JSX.Element[] = [];
 
   function rerender() {
     setRender(true);
@@ -135,33 +136,50 @@ export const CardsView: React.VFC = () => {
     
   }
 
-
-function handleRemoveButtonClick():void {
-  console.log("test");
-}
-    useEffect(() => {
-      (async function () {
-        //request cards
-        const cardsRequest = await fetch("/api/entry/sorted");
-        const cardJson = await cardsRequest.json();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async function constructSidebarLabels(labelJson: any) {
+    const labels = labelJson["data"];
+    /*if (labels.length == 0) {
+      
+    }*/
+    const labelArr = [];
+    for (let i = 0; i < labels.length; i++) {
+      const label = labels[i];
+      const labelId = label["id"];
+      labelArr.push(<Chip key={labelId} label={label["name"]} variant="outlined" 
+      onClick={async () => {
+        const res = await fetch(`/api/entry/byLabel/${labelId}`);
+        const cardJson = await res.json();
         constructEntries(cardJson);
+      }}
+      onDelete={() => console.log("delete")}
+      />);
+    }
+    setLabels(labelArr);
+  }
 
-        //request labels to sidebar
-        const sidebarLabels = await fetch('/api/label');
-        const labelJson = await sidebarLabels.json();
-        const labels = labelJson["data"];
-        const labelArr = [];
-        for (let i = 0; i < labels.length; i++) {
-          const label = labels[i];
-          labelArr.push(<Chip label={label["name"]} variant="outlined" 
-          onClick={() => console.log("click")}
-          onDelete={() => console.log("delete")}
-          />);
-        }
-        setLabels(labelArr);
+  function handleRemoveButtonClick():void {
+    console.log("test");
+  }
 
-      })();
-    },[render]);
+  function handleRemoveLabel():void {
+    console.log("§")
+  }
+
+  useEffect(() => {
+    (async function () {
+      //request cards
+      const cardsRequest = await fetch("/api/entry/sorted");
+      const cardJson = await cardsRequest.json();
+      constructEntries(cardJson);
+
+      //request labels to sidebar
+      const sidebarLabels = await fetch('/api/label');
+      const labelJson = await sidebarLabels.json();
+      constructSidebarLabels(labelJson);
+
+    })();
+  },[render]);
 
     
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -173,6 +191,7 @@ async function constructEntries(cardJson: any) {
     setRender(false);
     return;
   }
+  cardsArr = [];
   const firstDate = data[0]["date"];
   let lastYear: string = firstDate.substring(0,4);
   let lastMonth: string = firstDate.substring(5,7);
@@ -219,7 +238,7 @@ async function constructEntries(cardJson: any) {
   setRender(false);
 }
 
-const styleButton = {display: "block", margin: "auto"};
+const styleButton = {margin: "20px"};
 
 return (
     <Fragment>
@@ -231,6 +250,7 @@ return (
             <AddButton onClick={setNewEntry}>New</AddButton>
             <StyledHeader>Labels</StyledHeader>
             <Labels>{labels}</Labels>
+            <Button color="secondary" style={styleButton}>Show All</Button>
             
         </Sidebar>
         <Mainbar>

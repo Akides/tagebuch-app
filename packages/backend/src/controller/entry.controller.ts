@@ -77,25 +77,9 @@ export const getEntriesByInput = async (req:Request, res: Response) => {
   }
 }
 
-export const getEntriesByLabel = async (req:Request, res: Response) => {
-  const input = req.params.input;
 
-  const entryRepository = getRepository(Entry);
-  try {
-      const entries = await entryRepository.createQueryBuilder("entry")
-      .leftJoinAndSelect("entry.labels", "label")
-      .where('entry.content LIKE :input', {input: '%' + input + '%'})
-      .orderBy('entry.date', 'ASC')
-      .getMany();
-      res.send({
-          data: entries
-      });
-  } catch (error) {
-      send404(res);
-  }
-}
 
-export const getEntriesByDate = async (req:Request, res: Response) => {
+export const getEntriesByDateInput = async (req:Request, res: Response) => {
   const input = req.params.input;
   console.log(input)
 
@@ -108,6 +92,23 @@ export const getEntriesByDate = async (req:Request, res: Response) => {
       res.send({
           data: entries,
       });
+  } catch (error) {
+      send404(res);
+  }
+}
+
+export const getEntriesByLabel = async (req:Request, res: Response) => {
+  const labelId = req.params.id;
+  const entryRepository = getRepository(Entry);
+  try {
+    const entries = await entryRepository.createQueryBuilder("entry")
+    .leftJoinAndSelect("entry.labels", "label")
+    .where('label.id = :id', {id: labelId })
+    .orderBy('entry.date', 'ASC')
+    .getMany();
+    res.send({
+      data: entries
+    });
   } catch (error) {
       send404(res);
   }
