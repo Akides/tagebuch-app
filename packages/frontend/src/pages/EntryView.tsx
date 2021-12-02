@@ -3,6 +3,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { useParams } from 'react-router-dom'
 import { Entry } from "../components/Entry";
+import { EntryDetailed } from "../components/EntryDetailed";
 
 
 type EntryViewProps = {
@@ -18,7 +19,7 @@ export const EntryView: React.VFC<EntryViewProps> = () => {
             const res = await fetch(`/api/entry/${id}`);
             const resJson = await res.json();
             const entry = resJson["data"];
-            const entryComp = <Entry key={id} id={id as string} edit={false} preview={false} title={entry["title"]} labels={entry["labels"]} date={entry["date"].substring(0,10)} onClickFunc={() => {return}}>{entry["content"]}</Entry>
+            const entryComp = <EntryDetailed key={id} id={id as string} edit={false} title={entry["title"]} labels={entry["labels"]} date={entry["date"].substring(0,10)} onClickFunc={() => {return}}>{entry["content"]}</EntryDetailed>
             setEntry(entryComp);
           })();
     }, []);
