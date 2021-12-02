@@ -25,7 +25,6 @@ services:
     command: bash -c 'while !</dev/tcp/db/3306; do sleep 1; done; npm start'
     volumes:
       - ./packages/backend:/var/app/backend
-      - node_modules:/var/app/backend/node_modules
 
   phpmyadmin:
     image: phpmyadmin
