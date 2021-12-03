@@ -240,39 +240,6 @@ export const deleteEntry = async (req:Request, res: Response) => {
     } 
   }
 
-  export async function processLabel(mode: string, req: Request, res: Response) {
-    const labelId = req.params.labelId;
-    const entryId = req.params.entryId;
-
-    const entryRepository = getRepository(Entry);
-    const labelRepository = getRepository(Label);
-
-    try {
-      const entry = await entryRepository.findOneOrFail(entryId);
-      const label = await labelRepository.findOneOrFail(labelId);
-      try {
-        const rel = getConnection().createQueryBuilder().relation(Entry, "labels").of(entry)
-        switch (mode) {
-          case 'addLabel':
-            await rel.add(label);
-            break;
-          case 'removeLabel':
-            await rel.remove(label);
-            break;
-          default:
-            break;
-        }
-      } catch (error) {
-        send202(res);
-      }
-      res.send({
-        data: entry
-      });
-    } catch (error) {
-      send404(res);
-    }
-  }
-
   export async function getEntriesCSV(_: Request, res: Response) {
     const entryRepository = getRepository(Entry);
     try {

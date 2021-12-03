@@ -1,9 +1,9 @@
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import styled from "styled-components";
 import { mapDateToWeekday } from "../util/Util";
-import { AiFillEdit, AiOutlineCheck, AiOutlinePlus, AiOutlineClose } from "react-icons/ai";
-import {Chip, Fab, InputLabel, TextField} from '@mui/material';
+import { AiFillEdit, AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
+import {Chip, Fab, TextField} from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { Navigate } from 'react-router-dom';
 
@@ -105,7 +105,7 @@ async function handleOnClickRemove(id: string) {
     });
 
 }
-//TODO: HANDLEDELETE OF LABEL!
+
 async function handleLabelDelete(id: string, entryId: string) {
     console.log(id);
     console.log(entryId);
@@ -142,12 +142,23 @@ async function handleLabelAdd(label: string, entryId: string) {
     }
 }
 
+async function getWeather(date: string) {
+    const res = await fetch(`/api/weather/${date}`, {
+        headers: { "Content-Type": "application/json; charset=utf-8" }, method: 'GET'});
+
+    if (res.status != 200) {
+        throw new Error("could not retrieve weather data");
+    }
+    const data = await res.json();
+    return data["celsius"];
+}
 
 
 
 
 
 export const EntryDetailed: React.VFC<EntryDetailedProps> = ({ edit, children, id, title, labels, date }) => {
+    console.log(date);
     const [editable, setEditable] = useState(edit);
     const [input, setInput] = useState(children as string);
     const [inputTitle, setInputTitle] = useState(title);
@@ -157,6 +168,15 @@ export const EntryDetailed: React.VFC<EntryDetailedProps> = ({ edit, children, i
     const [labelInfo, setLabelInfo] = useState("");
     const [labelsToAdd, setLabelsToAdd] = useState([] as string[]);
     const [toCardview, setToCardview] = React.useState(false);
+    const [weather, setWeather] = useState("NaN");
+
+    useEffect(() => {
+        (async function () {
+            const temp = await getWeather(date);
+            setWeather(temp);
+          })();
+      },[]);
+
 
     function handleAddLabelOnClick() {
         if (!/\S/.test(inputNewLabel)) {  // contains only whitespaces or nothing
@@ -178,6 +198,7 @@ export const EntryDetailed: React.VFC<EntryDetailedProps> = ({ edit, children, i
     let labels_arr: JSX.Element[];
     
     if (editable) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         labels_arr = labels.map((label: any) =>
         <Chip key={label["id"]} label={label["name"]} onDelete={() => {
             handleLabelDelete(label["id"], id).catch(error => setLabelInfo(error+"")); 
@@ -222,6 +243,7 @@ export const EntryDetailed: React.VFC<EntryDetailedProps> = ({ edit, children, i
         );
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     labels_arr = labels.map((label: any) =>
         <Chip key={label["id"]} label={label["name"]} onClick={() => {
             handleLabelDelete(label["id"], id);
@@ -247,6 +269,7 @@ export const EntryDetailed: React.VFC<EntryDetailedProps> = ({ edit, children, i
                 <div>{labelInfo}</div>
                 <div>{labels_arr}</div>
                 <div>{inputWeekday} {inputDate}</div>
+                <div>Weather in Frankfurt: {weather}°</div>
             </Descr>
         </Wrapper>
     );
