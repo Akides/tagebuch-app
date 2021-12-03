@@ -204,13 +204,18 @@ export const EntryDetailed: React.VFC<EntryDetailedProps> = ({ edit, children, i
         return (
         <Wrapper>
             <AiOutlineCheck color="#747474"size="45px" style={{margin: '20px', float: "right"}} onClick={() => {
-                handleOnClickInsert(inputTitle as string, input as string, id, inputDate);
-                setInputWeekday(mapDateToWeekday(inputDate));
-                for (let i = 0; i < labelsToAdd.length; i++) {
-                    const labelToAdd = labelsToAdd[i];
-                    handleLabelAdd(labelToAdd, id).catch(() => setLabelInfo("label is already assigned."));
+                if (/\S/.test(inputTitle)) {  // contains only whitespaces or nothing
+                    handleOnClickInsert(inputTitle as string, input as string, id, inputDate);
+                    setInputWeekday(mapDateToWeekday(inputDate));
+                    for (let i = 0; i < labelsToAdd.length; i++) {
+                        const labelToAdd = labelsToAdd[i];
+                        handleLabelAdd(labelToAdd, id).catch(() => setLabelInfo("label is already assigned."));
+                    }
+                    setEditable(false);
+                } else {
+                    setLabelInfo("Please enter a title");
                 }
-                setEditable(false);
+                
             }}>save</AiOutlineCheck>
             <EditTitle value={inputTitle} onChange={e => {
                 setInputTitle((e.target as HTMLTextAreaElement).value);
