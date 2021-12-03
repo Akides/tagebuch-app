@@ -64,7 +64,6 @@ export function mapDateToWeekday(date: string):string {
 
   export function mapMonthToStr(month: string):string {
     let dayStr = "";
-    //console.log(new Date(date).getDay());
     switch (month) {
         case "01":
             dayStr = 'January';
@@ -107,4 +106,20 @@ export function mapDateToWeekday(date: string):string {
         break;
     }
     return dayStr;
+  }
+
+  export async function fetchEntriesCSV() {
+    const res = await fetch(`/api/entry/csv`, {
+      method: 'GET'
+    });
+    const text = await res.text().catch(() => {throw new Error("could not fetch entriesCSV.")});
+    console.log(text);
+    return text;
+  }
+
+  export function createDownloadLink(data: string) {
+
+    const blob = new Blob([data], {type:"text/csv"});
+    const href = URL.createObjectURL(blob);
+    return href;
   }

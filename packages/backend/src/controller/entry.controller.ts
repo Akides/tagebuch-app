@@ -41,7 +41,6 @@ export const getEntries = async (_:Request, res: Response) => {
 
 
 export const getEntriesSorted = async (_:Request, res: Response) => {
-  
   const entryRepository = getRepository(Entry);
   try {
       const entries = await entryRepository.createQueryBuilder("entry")
@@ -281,13 +280,10 @@ export const deleteEntry = async (req:Request, res: Response) => {
       .leftJoinAndSelect("entry.labels", "label")
       .orderBy('entry.date', 'ASC')
       .getMany();
-
-      console.log(entries);
       const parser = new Parser();
       const csv = parser.parse(entries);
-      console.log(csv);
-      
-      res.sendFile('./entries.csv');
+      res.attachment('entries.csv');
+      res.send(csv)
     } catch (error) {
         send404(res);
     }

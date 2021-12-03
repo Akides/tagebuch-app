@@ -6,7 +6,7 @@ import { Entry } from "../components/Entry";
 import { Theme } from "../Themes"
 import { Card } from "../components/Card";
 import styled from "styled-components";
-import { mapDateToWeekday, mapMonthToStr } from "../util/Util";
+import { createDownloadLink, fetchEntriesCSV, mapDateToWeekday, mapMonthToStr } from "../util/Util";
 import Dropdown from "react-dropdown";
 import 'react-dropdown/style.css';
 import { Button, Chip } from "@mui/material";
@@ -85,6 +85,13 @@ import { Link } from 'react-router-dom';
     margin: 20px;
   `;
 
+  const A = styled.a`
+    color: #979797;
+    position: fixed;
+    bottom: 20px;
+    left: 27px;
+  `;
+
 
 const options = [
   'Entries', 'Label', 'Date'
@@ -101,6 +108,7 @@ export const CardsView: React.VFC = () => {
   const [labels, setLabels] = useState<JSX.Element[] | null>(null);
   const [render, setRender] = useState(false);
   const [labelInfo, setLabelInfo] = useState("");
+  const [download, setDownload] = useState("");
   let cardsArr : JSX.Element[] = [];
 
   function rerender() {
@@ -193,6 +201,11 @@ export const CardsView: React.VFC = () => {
       const labelJson = await sidebarLabels.json();
       constructSidebarLabels(labelJson);
 
+      //prepare download link
+      const text = await fetchEntriesCSV();
+      const link = createDownloadLink(text);
+      setDownload(link);
+
     })();
   },[render]);
 
@@ -255,6 +268,7 @@ async function constructEntries(cardJson: any) {
 
 const styleButton = {margin: "20px"};
 
+
 return (
     <Fragment>
         <Sidebar>
@@ -266,8 +280,8 @@ return (
             <StyledHeader>Labels</StyledHeader>
             <Labels>{labels}</Labels>
             <LabelInfo>{labelInfo}</LabelInfo>
-            <Button color="secondary" style={styleButton}>Show All</Button>
-            
+            <Button color="secondary" style={styleButton} onClick={() => rerender()}>Show All</Button>
+            <A href={download} download="entries.csv">DOWNLOAD</A>
         </Sidebar>
         <Mainbar>
             {cards}
@@ -278,10 +292,6 @@ return (
     </Fragment>
     );
 };
-  
-function onInputChangeHandler(e: React.ChangeEvent<HTMLInputElement>):void{
-    console.log(e.target.value);
-}
 
 function getPlaceholder() {
   let placeholder = "";

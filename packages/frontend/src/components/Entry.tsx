@@ -2,10 +2,10 @@ import React, { ReactNode, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import styled from "styled-components";
 import { mapDateToWeekday } from "../util/Util";
-import { AiFillEdit, AiOutlineCheck, AiOutlinePlus, AiOutlineFullscreen } from "react-icons/ai";
-import {Chip, Fab, InputLabel, TextField} from '@mui/material';
+import { AiFillEdit, AiOutlineCheck, AiOutlineFullscreen } from "react-icons/ai";
+import {Chip, Fab, TextField} from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import { Link, Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 
 type EntryProps = {
@@ -135,7 +135,7 @@ async function handleLabelAdd(label: string, entryId: string) {
     }
 }
 
-export const Entry: React.VFC<EntryProps> = ({onClickFunc, edit, children, id, title, labels, date, preview }) => {
+export const Entry: React.VFC<EntryProps> = ({onClickFunc, edit, children, id, title, labels, date }) => {
     const [editable, setEditable] = useState(edit);
     const [input, setInput] = useState(children as string);
     const [inputTitle, setInputTitle] = useState(title);
@@ -214,9 +214,15 @@ export const Entry: React.VFC<EntryProps> = ({onClickFunc, edit, children, id, t
     labels_arr = labels.map((label: any) =>
         <Chip key={label["id"]} label={label["name"]} />)
 
+    let fullscreenIcon = <AiOutlineFullscreen size="28px" onClick={() => setToDetailedview(true)}/>
+    // prevent user from accessing detailed page because it's not yetloaded from db
+    if (id == "unsaved") {
+        fullscreenIcon = <div></div>
+    }
+
     return (
         <Wrapper>
-            <AiOutlineFullscreen size="28px" onClick={() => setToDetailedview(true)}/>
+            {fullscreenIcon}
            <AiFillEdit color="#474747" size="28px" style={{margin: '20px', float: "right"}} onClick={() => {
                 setEditable(true);
             }}/>
