@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { CardsView } from "./pages/CardsView";
 import { EntryView } from "./pages/EntryView";
 
-export const App = () => {
+export const App: React.FC = () => {
   return (
   <Fragment>
     <GlobalStyle/>

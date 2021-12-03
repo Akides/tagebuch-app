@@ -75,7 +75,7 @@ zurückgeben kann:
 - Einträge für ein bestimmtes Label anzeigen
     - In der Sidebar auf ein Label klicken.
 - Label erstellen
-    - Beim Bearbeiten eines Eintrags unten Labelnamen angeben und speichern. Nach dem die Änderung des Eintrags gespeichert wurde wird die Änderung in die Datenbank übernommen.
+    - Beim Bearbeiten eines Eintrags in der Detailansicht unten Labelnamen angeben und speichern. Nach dem die Änderung des Eintrags gespeichert wurde wird die Änderung in die Datenbank übernommen.
 - Label entfernen
     - von einem Eintrag entfernen: In die Detailansicht gehen. Auf den "Stift" klicken und unten die Label wegklicken
     - komplett löschen: Das zu löschende Label darf zu keinem Eintrag hinzugefügt sein. In der Sidebar das Label wegklicken.

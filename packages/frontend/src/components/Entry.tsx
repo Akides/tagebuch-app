@@ -1,10 +1,9 @@
-import React, { Fragment, ReactNode, useState } from "react";
+import React, { ReactNode, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import styled from "styled-components";
 import { mapDateToWeekday } from "../util/Util";
 import { AiFillEdit, AiOutlineCheck, AiOutlineFullscreen } from "react-icons/ai";
-import {Button, Chip, Fab, TextField} from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+import {Button, Chip, TextField} from '@mui/material';
 import { Navigate } from 'react-router-dom';
 
 
@@ -17,8 +16,7 @@ type EntryProps = {
     date: string,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onClickFunc: any,
-    edit: boolean,
-    preview: boolean
+    edit: boolean
 }
 
 const Wrapper = styled.div`
@@ -91,113 +89,25 @@ async function handleOnClickRemove(id: string) {
     });
 }
 
-async function handleLabelDelete(id: string, entryId: string) {
-    const res = await fetch(`/api/entry/removeLabel/${id}/${entryId}`, {
-                    method: 'DELETE'
-                });
-    if (res.status != 200) {    //label already exists
-        throw new Error("could not delete label.");
-    }
-}
-
-async function handleLabelAdd(label: string, entryId: string) {
-    let res = await fetch(`/api/label`, {
-        headers: { "Content-Type": "application/json; charset=utf-8" },
-                method: 'POST',
-                body: JSON.stringify({
-                    name: label
-                })
-    });
-
-    if (res.status != 200) {    //label already exists -> load label
-        res = await fetch(`/api/label/getWithName/${label}`, {
-            headers: { "Content-Type": "application/json; charset=utf-8" }, method: 'GET'});
-    }
-
-    const resJson = await res.json();
-    const labelId = resJson["data"]["id"];
-
-    res = await fetch(`/api/entry/addLabel/${labelId}/${entryId}`, {    //add label to entry
-            headers: { "Content-Type": "application/json; charset=utf-8" }, method: 'POST' });
-    
-    if (res.status != 200) {    //entry already has label
-        throw new Error("label with the same name already exists.");
-    }
-    return labelId;
-}
-
-export const Entry: React.VFC<EntryProps> = ({onClickFunc, edit, children, id, title, labels, date, preview }) => {
+export const Entry: React.VFC<EntryProps> = ({onClickFunc, edit, children, id, title, labels, date }) => {
     const [editable, setEditable] = useState(edit);
     const [inputContent, setInputContent] = useState(children as string);
     const [inputTitle, setInputTitle] = useState(title);
     const [inputDate, setInputDate] = useState(date);
     const [inputWeekday, setInputWeekday] = useState(mapDateToWeekday(date));
-    const [inputNewLabel, setInputNewLabel] = useState("");
-    const [labelInfo, setLabelInfo] = useState("");
-    const [labelsToAdd, setLabelsToAdd] = useState([] as string[]);
+    const [info, setInfo] = useState("");
     const [toDetailedview, setToDetailedview] = useState(false);
 
     let labelArr: JSX.Element[] = [];
-    if (editable) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        labelArr = labels.map((label: any) =>
-        <Chip key={label["id"]} label={label["name"]} onDelete={() => {
-            handleLabelDelete(label["id"], id).catch(error => setLabelInfo(error+"")); 
-        }}/>);
-    } else {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        labelArr = labels.map((label: any) => <Chip key={label["id"]} label={label["name"]} />);
-    }
-    const [labelsToShow, setLabelsToShow] = useState(labelArr);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    labelArr = labels.map((label: any) => <Chip key={label["id"]} label={label["name"]} />);
 
-
-    /**
-     * newly added labels must be added to labelsToShow which will later be displayed.
-     * Existing labels must be also newly constructed because the Chip component 
-     * misses onDelete if not in edit mode
-     */
-    const prepareLabelsToShow = () => {
-        const tmpAdded: JSX.Element[] = [];
-        for (let i = 0; i < labelsToAdd.length; i++) {
-            const labelToAdd = labelsToAdd[i];
-            handleLabelAdd(labelToAdd, id).catch(() => setLabelInfo("label is already assigned."));
-            const labelJSX = <Chip key={`unsaved_label${i}`} label={labelToAdd}/>
-            tmpAdded.push(labelJSX);
-        }
-        setLabelsToShow(labelsToShow.concat(tmpAdded));
-    };
-
-
-    /**
-     * newly added labels must be saved in an array so that 
-     * later they can be persisted in the database altogether
-     */
-    const handleAddLabelOnClick = () => {
-        if (!/\S/.test(inputNewLabel)) {  // contains only whitespaces or nothing
-            setLabelInfo("no labels added.");
-        } else { 
-            setLabelInfo(inputNewLabel+" saved. Save entry to confirm.");
-            const newLabelToAdd: string[] = labelsToAdd.slice();
-            newLabelToAdd.push(inputNewLabel);
-            setLabelsToAdd(newLabelToAdd);
-        }
-    }
 
     if (toDetailedview === true) {
         return <Navigate to={"/entryview/"+id}/>
     }
     
     if (editable) {
-        let labelPart: JSX.Element = <div></div>;
-        if (preview) {
-            labelPart =  <Fragment>
-                            <TextField size="small" id="outlined-basic" label="new label" variant="outlined" onChange={e => 
-                                setInputNewLabel((e.target as HTMLTextAreaElement).value)}/>
-                            <Fab size="small" color="secondary" aria-label="add" onClick={handleAddLabelOnClick}>
-                                <AddIcon />
-                            </Fab>
-                        </Fragment>
-        }
 
         return (
         <Wrapper>
@@ -205,11 +115,10 @@ export const Entry: React.VFC<EntryProps> = ({onClickFunc, edit, children, id, t
                 if (/\S/.test(inputTitle)) {  // contains only whitespaces or nothing
                     handleOnClickInsert(inputTitle as string, inputContent as string, id, inputDate);
                     setInputWeekday(mapDateToWeekday(inputDate));
-                    prepareLabelsToShow();
                     onClickFunc();
                     setEditable(false);
                 } else {
-                    setLabelInfo("Please enter a title");
+                    setInfo("Please enter a title");
                 }
             }}>save</AiOutlineCheck>
             <TextField id="title-basic" label="Title" variant="outlined" value={inputTitle} onChange={e => {
@@ -219,9 +128,8 @@ export const Entry: React.VFC<EntryProps> = ({onClickFunc, edit, children, id, t
                 setInputContent((e.target as HTMLTextAreaElement).value);
             }} ></InputContent>
             <Descr>
-                {labelPart}
-                <div>{labelInfo}</div>
-                <div>{labelsToShow}</div>
+                <div>{info}</div>
+                <div>{labelArr}</div>
                 <div>{inputWeekday}</div>
                 <textarea value={inputDate} onChange={e => {
                 setInputDate((e.target as HTMLTextAreaElement).value);
@@ -257,8 +165,8 @@ export const Entry: React.VFC<EntryProps> = ({onClickFunc, edit, children, id, t
                 </ReactMarkdown>
             </Content>
             <Descr>
-                <div>{labelInfo}</div>
-                <div>{labelsToShow}</div>
+                <div>{info}</div>
+                <div>{labelArr}</div>
                 <div>{inputWeekday} {inputDate}</div>
             </Descr>
         </Wrapper>

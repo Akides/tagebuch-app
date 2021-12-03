@@ -119,7 +119,7 @@ export const CardsView: React.VFC = () => {
   const setNewEntry = ():void => {
     const today = new Date();
     const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-    const entryComp = <Entry key={'unsaved'} id={'unsaved'} edit={true} preview={false} title="" labels={[]} date={date} onClickFunc={rerender}></Entry>
+    const entryComp = <Entry key={'unsaved'} id={'unsaved'} edit={true} title="" labels={[]} date={date} onClickFunc={rerender}></Entry>
     setEntry(entryComp);
   }
 
@@ -255,7 +255,7 @@ const constructEntries = async (cardJson: any) => {
       }
       const resJson = await res.json();
       const entry = resJson["data"];
-      const entryComp = <Entry key={id} id={id} edit={false} preview={true} title={entry["title"]} labels={labelsArr} date={realDate} onClickFunc={rerender}>{entry["content"]}</Entry>
+      const entryComp = <Entry key={id} id={id} edit={false} title={entry["title"]} labels={labelsArr} date={realDate} onClickFunc={rerender}>{entry["content"]}</Entry>
       setEntry(entryComp);
     }}>{card["content"]}</Card>
     cardsArr.push(cardComp);
