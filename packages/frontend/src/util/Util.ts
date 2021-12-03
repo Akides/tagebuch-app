@@ -108,7 +108,7 @@ export function mapDateToWeekday(date: string):string {
     return dayStr;
   }
 
-  export async function fetchEntriesCSV() {
+  export async function fetchEntriesCSV(): Promise<string> {
     const res = await fetch(`/api/entry/csv`, {
       method: 'GET'
     });
@@ -116,7 +116,7 @@ export function mapDateToWeekday(date: string):string {
     return text;
   }
 
-  export function createDownloadLink(data: string) {
+  export function createDownloadLink(data: string): string {
 
     const blob = new Blob([data], {type:"text/csv"});
     const href = URL.createObjectURL(blob);

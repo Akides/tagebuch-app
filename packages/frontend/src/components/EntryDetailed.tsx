@@ -189,7 +189,7 @@ export const EntryDetailed: React.VFC<EntryDetailedProps> = ({ edit, children, i
 
     if (toCardview === true) {
         return <Navigate to='/cardview'/>
-      }
+    }
 
     let labels_arr: JSX.Element[];
     

@@ -2,6 +2,9 @@ import { Request, Response } from "express"
 import axios from "axios";
 import { send404 } from "../util/responses";
 
+/**
+ * get temperature in celsius of Frankfurt of a specific date
+ */
 export const getWeatherData = async (req: Request, res: Response) => {
     const date = req.params.date;
     const split = date.split('-');

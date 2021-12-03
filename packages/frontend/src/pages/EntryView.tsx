@@ -12,7 +12,6 @@ type EntryViewProps = {
 export const EntryView: React.VFC<EntryViewProps> = () => {
     const [entry, setEntry] = useState<JSX.Element | null>(null);
     const { id } = useParams();
-    
 
     useEffect(() => {
         (async function () {

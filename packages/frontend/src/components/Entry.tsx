@@ -69,6 +69,7 @@ const RemoveButton = styled.button`
   `;
 
 async function handleOnClickInsert(title: string, input: string, id: string, date: string) {
+
     const response = await fetch(`/api/entry/${id}`, {
                         headers: { "Content-Type": "application/json; charset=utf-8" },
                         method: 'PATCH',
@@ -197,11 +198,16 @@ export const Entry: React.VFC<EntryProps> = ({onClickFunc, edit, children, id, t
         return (
         <Wrapper>
             <AiOutlineCheck color="#747474"size="28px" style={{margin: '20px', float: "right"}} onClick={() => {
-                handleOnClickInsert(inputTitle as string, input as string, id, inputDate);
-                setInputWeekday(mapDateToWeekday(inputDate));
-                onClickFunc();
-                prepareLabelsToShow();
-                setEditable(false);
+                if (/\S/.test(inputTitle)) {  // contains only whitespaces or nothing
+                    console.log("not white")
+                    handleOnClickInsert(inputTitle as string, input as string, id, inputDate);
+                    setInputWeekday(mapDateToWeekday(inputDate));
+                    onClickFunc();
+                    prepareLabelsToShow();
+                    setEditable(false);
+                } else {
+                    setLabelInfo("Please enter a title");
+                }
             }}>save</AiOutlineCheck>
             <EditTitle value={inputTitle} onChange={e => {
                 setInputTitle((e.target as HTMLTextAreaElement).value);

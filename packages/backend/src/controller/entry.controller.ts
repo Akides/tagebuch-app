@@ -11,6 +11,7 @@ export const createEntry = async (req: Request, res: Response) => {
   entry.title = req.body.title;
   entry.date = req.body.date;
   entry.content = req.body.content;
+  
   try {
     const createdEntry = await entryRepository.save(entry).catch(() => {
       send404(res);
@@ -23,6 +24,9 @@ export const createEntry = async (req: Request, res: Response) => {
   }
 }
 
+/**
+ * get all entries 
+ */
 export const getEntries = async (_:Request, res: Response) => {
   
     const entryRepository = getRepository(Entry);
@@ -38,10 +42,12 @@ export const getEntries = async (_:Request, res: Response) => {
     }
 }
 
-
-
+/**
+ * get all entries sorted in ascending order
+ */
 export const getEntriesSorted = async (_:Request, res: Response) => {
   const entryRepository = getRepository(Entry);
+
   try {
       const entries = await entryRepository.createQueryBuilder("entry")
       .leftJoinAndSelect("entry.labels", "label")
@@ -57,7 +63,9 @@ export const getEntriesSorted = async (_:Request, res: Response) => {
   }
 }
 
-
+/**
+ * get entries which include input in their content
+ */
 export const getEntriesByInput = async (req:Request, res: Response) => {
   const input = req.params.input;
 
@@ -76,8 +84,9 @@ export const getEntriesByInput = async (req:Request, res: Response) => {
   }
 }
 
-
-
+/**
+ * get entries which include input in their date
+ */
 export const getEntriesByDateInput = async (req:Request, res: Response) => {
   const input = req.params.input;
   const entryRepository = getRepository(Entry);
@@ -94,9 +103,13 @@ export const getEntriesByDateInput = async (req:Request, res: Response) => {
   }
 }
 
+/**
+ * get entries that have the corresponding label
+ */
 export const getEntriesByLabel = async (req:Request, res: Response) => {
   const labelId = req.params.id;
   const entryRepository = getRepository(Entry);
+
   try {
     const entries = await entryRepository.createQueryBuilder("entry")
     .leftJoinAndSelect("entry.labels", "label")
@@ -168,7 +181,6 @@ export const deleteEntry = async (req:Request, res: Response) => {
       send404(res);
     }
   }
-
   
   export const addLabel = async (req: Request, res: Response) => {
     const labelId = req.params.labelId;
@@ -191,7 +203,6 @@ export const deleteEntry = async (req:Request, res: Response) => {
       send404(res);
     }
   }
-
   
   export const removeLabel = async (req: Request, res: Response) => {
     const labelId = req.params.labelId;
@@ -215,7 +226,6 @@ export const deleteEntry = async (req:Request, res: Response) => {
       send404(res);
     }
   }
-  
 
   export const getLabels = async (req: Request, res: Response) => {
     const entryId = req.params.req;
