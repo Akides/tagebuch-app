@@ -15,6 +15,7 @@
 - im Root Ordner `docker-compose up` starten
 - Einmalig `docker-compose exec backend npm run typeorm schema:sync`
 ausführen, um das Datenbankschema zu synchronisieren
+- Es wird MySQL verwendet in Kombination mit PhpMyAdmin.
 - Das Backend läuft auf http://localhost:3000
 - Der Client läuft auf http://localhost:3002
 - PhpMyAdmin läuft auf http://localhost:8080. Login Daten:
