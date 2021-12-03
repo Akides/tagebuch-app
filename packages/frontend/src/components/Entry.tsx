@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from "react";
+import React, { Fragment, ReactNode, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import styled from "styled-components";
 import { mapDateToWeekday } from "../util/Util";
@@ -69,7 +69,7 @@ async function handleOnClickInsert(title: string, input: string, id: string, dat
                             date: date
                         })
                     });
-    if (response.status == 404) {
+    if (response.status != 200) {
         const res2 = await fetch(`/api/entry`, {
             headers: { "Content-Type": "application/json; charset=utf-8" },
                     method: 'POST',
@@ -126,7 +126,7 @@ async function handleLabelAdd(label: string, entryId: string) {
     return labelId;
 }
 
-export const Entry: React.VFC<EntryProps> = ({onClickFunc, edit, children, id, title, labels, date }) => {
+export const Entry: React.VFC<EntryProps> = ({onClickFunc, edit, children, id, title, labels, date, preview }) => {
     const [editable, setEditable] = useState(edit);
     const [inputContent, setInputContent] = useState(children as string);
     const [inputTitle, setInputTitle] = useState(title);
@@ -188,14 +188,25 @@ export const Entry: React.VFC<EntryProps> = ({onClickFunc, edit, children, id, t
     }
     
     if (editable) {
+        let labelPart: JSX.Element = <div></div>;
+        if (preview) {
+            labelPart =  <Fragment>
+                            <TextField size="small" id="outlined-basic" label="new label" variant="outlined" onChange={e => 
+                                setInputNewLabel((e.target as HTMLTextAreaElement).value)}/>
+                            <Fab size="small" color="secondary" aria-label="add" onClick={handleAddLabelOnClick}>
+                                <AddIcon />
+                            </Fab>
+                        </Fragment>
+        }
+
         return (
         <Wrapper>
             <AiOutlineCheck color="#747474"size="28px" style={{margin: '20px', float: "right"}} onClick={() => {
                 if (/\S/.test(inputTitle)) {  // contains only whitespaces or nothing
                     handleOnClickInsert(inputTitle as string, inputContent as string, id, inputDate);
                     setInputWeekday(mapDateToWeekday(inputDate));
-                    onClickFunc();
                     prepareLabelsToShow();
+                    onClickFunc();
                     setEditable(false);
                 } else {
                     setLabelInfo("Please enter a title");
@@ -208,11 +219,7 @@ export const Entry: React.VFC<EntryProps> = ({onClickFunc, edit, children, id, t
                 setInputContent((e.target as HTMLTextAreaElement).value);
             }} ></InputContent>
             <Descr>
-                <TextField size="small" id="outlined-basic" label="new label" variant="outlined" onChange={e => 
-                    setInputNewLabel((e.target as HTMLTextAreaElement).value)}/>
-                <Fab size="small" color="secondary" aria-label="add" onClick={handleAddLabelOnClick}>
-                    <AddIcon />
-                </Fab>
+                {labelPart}
                 <div>{labelInfo}</div>
                 <div>{labelsToShow}</div>
                 <div>{inputWeekday}</div>

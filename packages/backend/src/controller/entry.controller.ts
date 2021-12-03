@@ -238,6 +238,6 @@ export const deleteEntry = async (req:Request, res: Response) => {
       res.attachment('entries.csv');
       res.send(csv)
     } catch (error) {
-        send404(res);
+      res.send("no entries")
     }
   }
