@@ -27,6 +27,9 @@ display: flex;
 &:hover {
     background-color: #e9e9e9;
 }
+&:active {
+    background-color: #dddddd;
+}
 `;
 
 const Date = styled.div`

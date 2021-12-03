@@ -8,7 +8,7 @@ import { addLabel,
     getEntriesByLabel, 
     getEntriesCSV, 
     getEntriesSorted, 
-    getEntry, getLabels, 
+    getEntry,
     patchEntry, 
     removeLabel } from '../controller/entry.controller';
     
@@ -24,7 +24,5 @@ import { addLabel,
     entryRouter.get('/byInput/:input', getEntriesByInput);
     entryRouter.get('/byLabel/:id', getEntriesByLabel);
     entryRouter.get('/byDate/:input', getEntriesByDateInput);
-    
     entryRouter.post('/addLabel/:labelId/:entryId', addLabel);
     entryRouter.delete('/removeLabel/:labelId/:entryId', removeLabel);
-    entryRouter.get('/getlabels/:entryId', getLabels);

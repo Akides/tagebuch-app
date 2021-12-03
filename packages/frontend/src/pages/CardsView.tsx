@@ -9,96 +9,100 @@ import 'react-dropdown/style.css';
 import { Button, Chip } from "@mui/material";
 
 
-  const Mainbar = styled.div`
-    background-color: #f8f8f8;
-    float: left;
-    border-right: #ddd 2px solid;
-    padding-bottom: 100%;
-    margin-left: 270px;
-  `;
+const Mainbar = styled.div`
+  background-color: #f8f8f8;
+  float: left;
+  border-right: #ddd 2px solid;
+  padding-bottom: 100%;
+  margin-left: 270px;
+`;
 
-  const Sidebar = styled.div`
-    width: 270px;
-    position: fixed;
-    float: left;
-    background-color: #1b1b1b;
-    border-right: #ddd 2px solid;
-    padding-bottom: 100%;
-    align-items: center;
-  `;
+const Sidebar = styled.div`
+  width: 270px;
+  position: fixed;
+  float: left;
+  background-color: #1b1b1b;
+  border-right: #ddd 2px solid;
+  padding-bottom: 100%;
+  align-items: center;
+`;
 
-  const StyledDate = styled.div`
-    font-weight: bold;
-    margin: 10px;
-    margin-top: 30px;
-    padding-bottom: 5px;
-    border-bottom: ${props => props.theme.sizes.borderWidth} solid ${props => props.theme.colors.borderColor};
-  `;
+const StyledDate = styled.div`
+  font-weight: bold;
+  margin: 10px;
+  margin-top: 30px;
+  padding-bottom: 5px;
+  border-bottom: ${props => props.theme.sizes.borderWidth} solid ${props => props.theme.colors.borderColor};
+`;
 
 
-  const AddButton = styled.button`
-    background-color:${props => props.theme.colors.elementsColor};
-    border: none;
-    border-radius: 50px;
-    color: white;
-    padding: 5px 100px;
-    margin: auto;
-    text-align: center;
-    text-decoration: none;
-    display: flex;
-    font-size: 16px;
-  `;
+const AddButton = styled.button`
+  background-color:${props => props.theme.colors.elementsColor};
+  border: none;
+  border-radius: 50px;
+  color: white;
+  padding: 5px 100px;
+  margin: auto;
+  text-align: center;
+  text-decoration: none;
+  display: flex;
+  font-size: 16px;
+  &:hover {
+    background-color: #94b693;
+  }
+  &:active {
+    background-color: #b8e0b7;
+  }
+`;
 
-  const SearchInput = styled.input`
-    display: flex;
-    margin: 12px auto;
-    margin-top: 30px;
-    font-size: 15px;
-    border-radius: 50px;
-  `;
+const SearchInput = styled.input`
+  display: flex;
+  margin: 12px auto;
+  margin-top: 30px;
+  font-size: 15px;
+  border-radius: 50px;
+`;
 
-  const Labels = styled.div`
-      //margin: auto;
-      //display: block;
-      margin: 20px;
-      padding: 5px;
-      border-radius: 5px;
-      background-color: white;
-
-  `;
-
-  const StyledHeader = styled.div`
-    margin: 10px;
-    margin-left: 20px;
-    margin-right: 20px;
-    padding: 5px;
-    color: white;
-    border-bottom: 1px solid ${props => props.theme.colors.borderColor};
-  `;
-
-  const LabelInfo = styled.div`
-    color: white;
+const Labels = styled.div`
+    //margin: auto;
+    //display: block;
     margin: 20px;
-  `;
+    padding: 5px;
+    border-radius: 5px;
+    background-color: white;
 
-  const A = styled.a`
-    color: #979797;
-    position: fixed;
-    bottom: 20px;
-    left: 27px;
-  `;
+`;
 
+const StyledHeader = styled.div`
+  margin: 10px;
+  margin-left: 20px;
+  margin-right: 20px;
+  padding: 5px;
+  color: white;
+  border-bottom: 1px solid ${props => props.theme.colors.borderColor};
+`;
+
+const LabelInfo = styled.div`
+  color: white;
+  margin: 20px;
+`;
+
+const A = styled.a`
+  color: #979797;
+  position: fixed;
+  bottom: 20px;
+  left: 27px;
+`;
 
 const options = [
-  'Entries', 'Label', 'Date'
+  'Entries', 'Date'
 ];
-
 
 let selectedOption = options[0];
 
 
+
 export const CardsView: React.VFC = () => {
-  
   const [cards, setCards] = useState<JSX.Element[] | null>(null);
   const [entry, setEntry] = useState<JSX.Element | null>(null);
   const [labels, setLabels] = useState<JSX.Element[] | null>(null);
@@ -112,14 +116,14 @@ export const CardsView: React.VFC = () => {
   }
 
 
-  function setNewEntry():void {
+  const setNewEntry = ():void => {
     const today = new Date();
     const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
     const entryComp = <Entry key={'unsaved'} id={'unsaved'} edit={true} preview={false} title="" labels={[]} date={date} onClickFunc={rerender}></Entry>
     setEntry(entryComp);
   }
 
-  async function handleDeleteLabel(id: string) {
+  const handleDeleteLabel = async (id: string) => {
     const res = await fetch(`/api/label/${id}`, {
                     method: 'DELETE'
                 });
@@ -128,7 +132,7 @@ export const CardsView: React.VFC = () => {
     }
   }
 
-  async function searchCards(input: string, selectedOption: string) {
+  const searchCards = async (input: string, selectedOption: string) => {
     if (!/\S/.test(input)) {  // contains only whitespaces or nothing
       rerender();
       return;
@@ -136,19 +140,17 @@ export const CardsView: React.VFC = () => {
   
     let cardJson = "";
     let res: Response;
+    
     if (selectedOption == options[0]) {
       res = await fetch(`/api/entry/byInput/${input}`);
       cardJson = await res.json();
-    }
-    
-    if (selectedOption == options[1]) {
-      res = await fetch(`/api/entry/byLabel/${input}`);
-      cardJson = await res.json();
-    }
-    
-    if (selectedOption == options[2]) {
+    } else {
       res = await fetch(`/api/entry/byDate/${input}`);
       cardJson = await res.json();
+    }
+
+    if (res.status != 200) {    //label already exists
+      throw new Error("could not search cards");
     }
     
     constructEntries(cardJson);
@@ -156,11 +158,8 @@ export const CardsView: React.VFC = () => {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async function constructSidebarLabels(labelJson: any) {
+  const constructSidebarLabels = async (labelJson: any) => {
     const labels = labelJson["data"];
-    /*if (labels.length == 0) {
-      
-    }*/
     const labelArr = [];
     for (let i = 0; i < labels.length; i++) {
       const label = labels[i];
@@ -168,6 +167,9 @@ export const CardsView: React.VFC = () => {
       labelArr.push(<Chip key={labelId} label={label["name"]} variant="outlined" 
       onClick={async () => {
         const res = await fetch(`/api/entry/byLabel/${labelId}`);
+        if (res.status != 200) {
+          throw new Error("could not fetch data.");
+        }
         const cardJson = await res.json();
         constructEntries(cardJson);
       }}
@@ -180,19 +182,24 @@ export const CardsView: React.VFC = () => {
   useEffect(() => {
     (async function () {
       //request cards
-      const cardsRequest = await fetch("/api/entry/sorted");
-      const cardJson = await cardsRequest.json();
-      constructEntries(cardJson);
+      try {
+        const cardsRequest = await fetch("/api/entry/sorted");
+        const cardJson = await cardsRequest.json();
+        constructEntries(cardJson);
 
-      //request labels to sidebar
-      const sidebarLabels = await fetch('/api/label');
-      const labelJson = await sidebarLabels.json();
-      constructSidebarLabels(labelJson);
+        //request labels to sidebar
+        const sidebarLabels = await fetch('/api/label');
+        const labelJson = await sidebarLabels.json();
+        constructSidebarLabels(labelJson);
 
-      //prepare download link
-      const text = await fetchEntriesCSV();
-      const link = createDownloadLink(text);
-      setDownload(link);
+        //prepare download link
+        const text = await fetchEntriesCSV();
+        const link = createDownloadLink(text);
+        setDownload(link);
+      } catch (error) {
+        alert("something went wrong! Could not fetch data.");
+      }
+      
 
     })();
   },[render]);
@@ -202,7 +209,7 @@ export const CardsView: React.VFC = () => {
  * construct entries as cards components and as entry components
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function constructEntries(cardJson: any) {
+const constructEntries = async (cardJson: any) => {
   cardsArr = [];
   const data = cardJson["data"];
   if (data.length == 0) {
@@ -243,6 +250,9 @@ async function constructEntries(cardJson: any) {
     }
     const cardComp = <Card key={id} title={title} day={day} weekday={mapDateToWeekday(date)} labels={labelsArr} onClick={async () => {
       const res = await fetch(`/api/entry/${id}`);
+      if (res.status != 200) {
+        throw new Error("could not fetch data.");
+      }
       const resJson = await res.json();
       const entry = resJson["data"];
       const entryComp = <Entry key={id} id={id} edit={false} preview={true} title={entry["title"]} labels={labelsArr} date={realDate} onClickFunc={rerender}>{entry["content"]}</Entry>
@@ -264,7 +274,7 @@ return (
     <Fragment>
         <Sidebar>
             <Dropdown options={options} value={selectedOption} onChange={(e) => selectedOption = e.value} placeholder="Select an option" />
-            <SearchInput type="text" placeholder={getPlaceholder()} onKeyPress={e => {
+            <SearchInput type="text" placeholder="search" onKeyPress={e => {
                 if (e.key == 'Enter') searchCards((e.target as HTMLInputElement).value, selectedOption);
                 }} />
             <AddButton onClick={setNewEntry}>New</AddButton>
@@ -283,17 +293,3 @@ return (
     </Fragment>
     );
 };
-
-function getPlaceholder() {
-  let placeholder = "";
-  if (selectedOption == options[0]) {
-    placeholder =  "search";
-  }
-  if (selectedOption == options[1]) {
-    return "search with labels";
-  }
-  if (selectedOption == options[2]) {
-    return "1997-09-20";
-  }
-  return placeholder;
-}

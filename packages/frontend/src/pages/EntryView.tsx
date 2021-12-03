@@ -16,6 +16,9 @@ export const EntryView: React.VFC<EntryViewProps> = () => {
     useEffect(() => {
         (async function () {
             const res = await fetch(`/api/entry/${id}`);
+            if (res.status != 200) {
+                throw new Error("could not fetch data.");
+            }
             const resJson = await res.json();
             const entry = resJson["data"];
             const entryComp = <EntryDetailed key={id} id={id as string} edit={false} title={entry["title"]} labels={entry["labels"]} date={entry["date"].substring(0,10)}>{entry["content"]}</EntryDetailed>

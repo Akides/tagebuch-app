@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
-
 type SearchProps = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onInput: any
 }
 

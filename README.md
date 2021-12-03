@@ -26,7 +26,7 @@ ausführen, um das Datenbankschema zu synchronisieren
 ## **Backend Informationen**
 ---
 ### **Testen der Anfragen**
-Ich habe eine Postman Collection erstellt, damit können die Requests getestet werden.
+Ich habe eine Postman Collection erstellt, damit können die Requests getestet werden: [Zur Collection](packages/backend/postman/diary-app.postman_collection.json)
 
 
 ### **Struktur der Routen**
@@ -71,6 +71,7 @@ zurückgeben kann:
 - Suchen
     - In der Listenansicht über dem Suchfeld das Dropdown Menu benutzen um einzustellen, nach was gesucht werden soll.
     - In das Suchfeld in der Sidebar Suchinhalt angeben und mit Enter bestätigen. Mit "SHOW ALL" wird der Filter aufgehoben.
+    - Datum nach dem Format `YYYY-MM-DD` suchen.
 - Einträge für ein bestimmtes Label anzeigen
     - In der Sidebar auf ein Label klicken.
 - Label erstellen
@@ -80,7 +81,7 @@ zurückgeben kann:
     - komplett löschen: Das zu löschende Label darf zu keinem Eintrag hinzugefügt sein. In der Sidebar das Label wegklicken.
 - Sonstiges:
     - Der Wochentag eines Eintrags wird automatisch eingetragen.
-    - Die Tagestemperatur wird in der Detailansicht angezeigt.
+    - Die Tagestemperatur in Frankfurt wird in der Detailansicht angezeigt.
     - Markdown wird unterstützt.
 
 ### **Routen**

@@ -54,7 +54,6 @@ export const getEntriesSorted = async (_:Request, res: Response) => {
       .orderBy('entry.date', 'ASC')
       .getMany();
 
-
       res.send({
           data: entries,
       });
@@ -225,26 +224,6 @@ export const deleteEntry = async (req:Request, res: Response) => {
     } catch (error) {
       send404(res);
     }
-  }
-
-  export const getLabels = async (req: Request, res: Response) => {
-    const entryId = req.params.req;
-    const entryRepository = getRepository(Entry);
-
-    try {
-       const entry = await entryRepository.findOneOrFail(entryId);
-      try {
-        const labels = await getConnection().createQueryBuilder().relation(Entry, "labels").of(entry).loadMany();
-
-        res.send({
-          data: labels
-        });
-      } catch (error) {
-        send202(res);
-      }
-    } catch (error) {
-      send404(res);
-    } 
   }
 
   export async function getEntriesCSV(_: Request, res: Response) {

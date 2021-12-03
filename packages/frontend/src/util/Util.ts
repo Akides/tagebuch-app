@@ -23,7 +23,7 @@ export function mapDayToWeekday(dayNum: number):string {
       dayStr = 'SUN';
       break;
     default:
-      dayStr = 'NOT_AVAILABLE';
+      dayStr = 'invalid date. Not saved.';
       break;
   }
   return dayStr;
@@ -56,7 +56,7 @@ export function mapDateToWeekday(date: string):string {
         dayStr = 'SUN';
         break;
       default:
-        dayStr = 'NOT_AVAILABLE';
+        dayStr = 'invalid date. Not saved.';
         break;
     }
     return dayStr;
@@ -102,7 +102,7 @@ export function mapDateToWeekday(date: string):string {
             dayStr = 'December';
             break;
       default:
-        dayStr = 'NOT_AVAILABLE';
+        dayStr = 'invald date. Not saved.';
         break;
     }
     return dayStr;

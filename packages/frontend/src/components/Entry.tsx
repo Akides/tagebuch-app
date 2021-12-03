@@ -3,7 +3,7 @@ import ReactMarkdown from "react-markdown";
 import styled from "styled-components";
 import { mapDateToWeekday } from "../util/Util";
 import { AiFillEdit, AiOutlineCheck, AiOutlineFullscreen } from "react-icons/ai";
-import {Chip, Fab, TextField} from '@mui/material';
+import {Button, Chip, Fab, TextField} from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { Navigate } from 'react-router-dom';
 
@@ -52,21 +52,11 @@ const Descr = styled.div`
 
 const InputContent = styled.textarea`
     border: 1px solid ${props => props.theme.colors.borderColor};
+    border-radius: 4px;
     font-size: ${props => props.theme.sizes.fontSize};
     width: 100%;
     height: 500px;
 `;
-
-const EditTitle = styled.textarea`
-    border: 1px solid ${props => props.theme.colors.borderColor};
-    font-size: large;
-    font-weight: bold;
-`;
-
-const RemoveButton = styled.button`
-    color: ${props => props.theme.colors.fontColor};
-    float: right;
-  `;
 
 async function handleOnClickInsert(title: string, input: string, id: string, date: string) {
 
@@ -80,7 +70,7 @@ async function handleOnClickInsert(title: string, input: string, id: string, dat
                         })
                     });
     if (response.status == 404) {
-        await fetch(`/api/entry`, {
+        const res2 = await fetch(`/api/entry`, {
             headers: { "Content-Type": "application/json; charset=utf-8" },
                     method: 'POST',
                     body: JSON.stringify({
@@ -89,6 +79,9 @@ async function handleOnClickInsert(title: string, input: string, id: string, dat
                         date: date
                     })
         });
+        if (res2.status != 200) {
+            throw new Error("could not fetch data.");
+        }
     }
 }
 
@@ -135,7 +128,7 @@ async function handleLabelAdd(label: string, entryId: string) {
 
 export const Entry: React.VFC<EntryProps> = ({onClickFunc, edit, children, id, title, labels, date }) => {
     const [editable, setEditable] = useState(edit);
-    const [input, setInput] = useState(children as string);
+    const [inputContent, setInputContent] = useState(children as string);
     const [inputTitle, setInputTitle] = useState(title);
     const [inputDate, setInputDate] = useState(date);
     const [inputWeekday, setInputWeekday] = useState(mapDateToWeekday(date));
@@ -199,7 +192,7 @@ export const Entry: React.VFC<EntryProps> = ({onClickFunc, edit, children, id, t
         <Wrapper>
             <AiOutlineCheck color="#747474"size="28px" style={{margin: '20px', float: "right"}} onClick={() => {
                 if (/\S/.test(inputTitle)) {  // contains only whitespaces or nothing
-                    handleOnClickInsert(inputTitle as string, input as string, id, inputDate);
+                    handleOnClickInsert(inputTitle as string, inputContent as string, id, inputDate);
                     setInputWeekday(mapDateToWeekday(inputDate));
                     onClickFunc();
                     prepareLabelsToShow();
@@ -208,11 +201,11 @@ export const Entry: React.VFC<EntryProps> = ({onClickFunc, edit, children, id, t
                     setLabelInfo("Please enter a title");
                 }
             }}>save</AiOutlineCheck>
-            <EditTitle value={inputTitle} onChange={e => {
+            <TextField id="title-basic" label="Title" variant="outlined" value={inputTitle} onChange={e => {
                 setInputTitle((e.target as HTMLTextAreaElement).value);
-            }}></EditTitle>
-            <InputContent value={input} onChange={e => {
-                setInput((e.target as HTMLTextAreaElement).value);
+            }}/>
+            <InputContent value={inputContent} onChange={e => {
+                setInputContent((e.target as HTMLTextAreaElement).value);
             }} ></InputContent>
             <Descr>
                 <TextField size="small" id="outlined-basic" label="new label" variant="outlined" onChange={e => 
@@ -227,10 +220,12 @@ export const Entry: React.VFC<EntryProps> = ({onClickFunc, edit, children, id, t
                 setInputDate((e.target as HTMLTextAreaElement).value);
             }}>{date}</textarea>
             </Descr>
-            <RemoveButton onClick={() => {
+            <Button style={{float: "right"}} onClick={() => {
                 handleOnClickRemove(id);
                 onClickFunc();
-            }}>Remove</RemoveButton>
+                setInputTitle("");
+                setInputContent("");
+            }}>Remove</Button>
         </Wrapper>
         );
     }
@@ -251,7 +246,7 @@ export const Entry: React.VFC<EntryProps> = ({onClickFunc, edit, children, id, t
             <h2>{inputTitle}</h2>
             <Content>
                 <ReactMarkdown>
-                    {input}
+                    {inputContent}
                 </ReactMarkdown>
             </Content>
             <Descr>

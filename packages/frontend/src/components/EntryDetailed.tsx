@@ -3,7 +3,7 @@ import ReactMarkdown from "react-markdown";
 import styled from "styled-components";
 import { mapDateToWeekday } from "../util/Util";
 import { AiFillEdit, AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
-import {Chip, Fab, TextField} from '@mui/material';
+import {Button, Chip, Fab, TextField} from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { Navigate } from 'react-router-dom';
 
@@ -56,21 +56,11 @@ const Title = styled.div`
 
 const InputContent = styled.textarea`
     border: 1px solid ${props => props.theme.colors.borderColor};
+    border-radius: 4px;
     font-size: ${props => props.theme.sizes.fontSize};
     width: 100%;
     height: 600px;
 `;
-
-const EditTitle = styled.textarea`
-    border: 1px solid ${props => props.theme.colors.borderColor};
-    font-size: 50px;
-    font-weight: bold;
-`;
-
-const RemoveButton = styled.button`
-    color: ${props => props.theme.colors.fontColor};
-    float: right;
-  `;
 
 async function handleOnClickInsert(title: string, input: string, id: string, date: string) {
     const response = await fetch(`/api/entry/${id}`, {
@@ -175,7 +165,7 @@ export const EntryDetailed: React.VFC<EntryDetailedProps> = ({ edit, children, i
       },[]);
 
 
-    function handleAddLabelOnClick() {
+    const handleAddLabelOnClick = () => {
         if (!/\S/.test(inputNewLabel)) {  // contains only whitespaces or nothing
             setLabelInfo("no labels added.");
         } else { 
@@ -217,9 +207,9 @@ export const EntryDetailed: React.VFC<EntryDetailedProps> = ({ edit, children, i
                 }
                 
             }}>save</AiOutlineCheck>
-            <EditTitle value={inputTitle} onChange={e => {
+             <TextField id="title-basic" label="Title" variant="outlined" value={inputTitle} onChange={e => {
                 setInputTitle((e.target as HTMLTextAreaElement).value);
-            }}></EditTitle>
+            }}/>
             <InputContent value={input} onChange={e => {
                 setInput((e.target as HTMLTextAreaElement).value);
             }} ></InputContent>
@@ -236,10 +226,10 @@ export const EntryDetailed: React.VFC<EntryDetailedProps> = ({ edit, children, i
                 setInputDate((e.target as HTMLTextAreaElement).value);
             }}>{date}</textarea>
             </Descr>
-            <RemoveButton onClick={() => {
+            <Button style={{float: "right"}} onClick={() => {
                 handleOnClickRemove(id);
                 setToCardview(true);    // return to cardview page since entry is deleted
-            }}>Remove</RemoveButton>
+            }}>Remove</Button>
         </Wrapper>
         );
     }
