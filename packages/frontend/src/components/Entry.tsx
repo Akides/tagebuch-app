@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { ReactNode, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import styled from "styled-components";
 import { mapDateToWeekday } from "../util/Util";
@@ -146,10 +146,6 @@ export const Entry: React.VFC<EntryProps> = ({onClickFunc, edit, children, id, t
     const [labelsToAdd, setLabelsToAdd] = useState([] as string[]);
     const [toDetailedview, setToDetailedview] = useState(false);
 
-    useEffect(() => {
-        set
-    },[]);
-
     // push label to add to array, so that later all of them can be saved
     function handleAddLabelOnClick() {
         if (!/\S/.test(inputNewLabel)) {  // contains only whitespaces or nothing
@@ -186,8 +182,6 @@ export const Entry: React.VFC<EntryProps> = ({onClickFunc, edit, children, id, t
                 for (let i = 0; i < labelsToAdd.length; i++) {
                     const labelToAdd = labelsToAdd[i];
                     handleLabelAdd(labelToAdd, id).catch(() => setLabelInfo("label is already assigned."));
-                    //rerender component
-
                 }
                 setEditable(false);
             }}>save</AiOutlineCheck>
