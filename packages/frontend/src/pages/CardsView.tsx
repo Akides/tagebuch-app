@@ -192,7 +192,6 @@ export const CardsView: React.VFC = () => {
   useEffect(() => {
     (async function () {
       //request cards
-      console.log("rerender")
       const cardsRequest = await fetch("/api/entry/sorted");
       const cardJson = await cardsRequest.json();
       constructEntries(cardJson);

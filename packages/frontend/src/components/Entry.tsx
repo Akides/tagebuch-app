@@ -161,22 +161,25 @@ export const Entry: React.VFC<EntryProps> = ({onClickFunc, edit, children, id, t
     const [labelsToShow, setLabelsToShow] = useState(labelArr);
 
 
-
+    /**
+     * newly added labels must be added to labelsToShow which will later be displayed.
+     * Existing labels must be also newly constructed because the Chip component misses onDelete if not in edit mode
+     */
     const prepareLabelsToShow = () => {
         const tmpAdded: JSX.Element[] = [];
-                for (let i = 0; i < labelsToAdd.length; i++) {
-                    const labelToAdd = labelsToAdd[i];
-                    handleLabelAdd(labelToAdd, id).catch(() => setLabelInfo("label is already assigned."));
-                    const labelJSX = <Chip key={`unsaved_label${i}`} label={labelToAdd} />
-                    tmpAdded.push(labelJSX);
-                }
-                //labelArr = labels.map((label: any) => <Chip key={label["id"]} label={label["name"]} />);
-                //labelsAdded = labelsToAdd.map((label: any) => <Chip key={label["id"]} label={label["name"]} />);
-                setLabelsToShow(labelsToShow.concat(tmpAdded));
+        for (let i = 0; i < labelsToAdd.length; i++) {
+            const labelToAdd = labelsToAdd[i];
+            handleLabelAdd(labelToAdd, id).catch(() => setLabelInfo("label is already assigned."));
+            const labelJSX = <Chip key={`unsaved_label${i}`} label={labelToAdd}/>
+            tmpAdded.push(labelJSX);
+        }
+        setLabelsToShow(labelsToShow.concat(tmpAdded));
     };
 
 
-    // push label to add to array, so that later all of them can be saved
+    /**
+     * newly added labels must be saved in an array so that later they can be persisted altogether in the database
+     */
     const handleAddLabelOnClick = () => {
         if (!/\S/.test(inputNewLabel)) {  // contains only whitespaces or nothing
             setLabelInfo("no labels added.");
