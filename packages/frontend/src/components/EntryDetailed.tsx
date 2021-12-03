@@ -107,8 +107,6 @@ async function handleOnClickRemove(id: string) {
 }
 
 async function handleLabelDelete(id: string, entryId: string) {
-    console.log(id);
-    console.log(entryId);
     const res = await fetch(`/api/entry/removeLabel/${id}/${entryId}`, {
                     method: 'DELETE'
                 });
@@ -158,7 +156,6 @@ async function getWeather(date: string) {
 
 
 export const EntryDetailed: React.VFC<EntryDetailedProps> = ({ edit, children, id, title, labels, date }) => {
-    console.log(date);
     const [editable, setEditable] = useState(edit);
     const [input, setInput] = useState(children as string);
     const [inputTitle, setInputTitle] = useState(title);
@@ -172,8 +169,12 @@ export const EntryDetailed: React.VFC<EntryDetailedProps> = ({ edit, children, i
 
     useEffect(() => {
         (async function () {
-            const temp = await getWeather(date);
-            setWeather(temp);
+            try {
+                const temp = await getWeather(date);
+                setWeather(temp);
+            } catch (error) {
+                setWeather("Could not retrieve weather.");
+            }
           })();
       },[]);
 
@@ -186,7 +187,6 @@ export const EntryDetailed: React.VFC<EntryDetailedProps> = ({ edit, children, i
             const newLabelToAdd: string[] = labelsToAdd.slice();
             newLabelToAdd.push(inputNewLabel);
             setLabelsToAdd(newLabelToAdd);
-            console.log(newLabelToAdd.length);
         }
     }
 

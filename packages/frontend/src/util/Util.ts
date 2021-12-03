@@ -113,7 +113,6 @@ export function mapDateToWeekday(date: string):string {
       method: 'GET'
     });
     const text = await res.text().catch(() => {throw new Error("could not fetch entriesCSV.")});
-    console.log(text);
     return text;
   }
 

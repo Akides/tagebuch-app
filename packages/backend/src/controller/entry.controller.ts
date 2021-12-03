@@ -12,8 +12,8 @@ export const createEntry = async (req: Request, res: Response) => {
   entry.date = req.body.date;
   entry.content = req.body.content;
   try {
-    const createdEntry = await entryRepository.save(entry).catch((error) => {
-      console.error(error);
+    const createdEntry = await entryRepository.save(entry).catch(() => {
+      send404(res);
     });
     res.send({
       data: createdEntry
@@ -80,8 +80,6 @@ export const getEntriesByInput = async (req:Request, res: Response) => {
 
 export const getEntriesByDateInput = async (req:Request, res: Response) => {
   const input = req.params.input;
-  console.log(input)
-
   const entryRepository = getRepository(Entry);
   try {
       const entries = await entryRepository.createQueryBuilder("entry")
@@ -135,7 +133,6 @@ export const deleteEntry = async (req:Request, res: Response) => {
     const entryRepository = getRepository(Entry);
   
     try {
-      console.log(entryId);
       const entry = await entryRepository.findOneOrFail(entryId);
       await entryRepository.remove(entry);
       res.send({});
@@ -162,7 +159,7 @@ export const deleteEntry = async (req:Request, res: Response) => {
       try {
           await entryRepository.save(entry);
       } catch (error) {
-          console.log(error);
+        send202(res);
       }
       res.send({
         data: entry
