@@ -67,10 +67,6 @@ const EditTitle = styled.textarea`
     font-weight: bold;
 `;
 
-const EditDate = styled.textarea`
-    
-`;
-
 const RemoveButton = styled.button`
     color: ${props => props.theme.colors.fontColor};
     float: right;
@@ -231,9 +227,9 @@ export const EntryDetailed: React.VFC<EntryDetailedProps> = ({ edit, children, i
                 <div>{labelInfo}</div>
                 <div>{labels_arr}</div>
                 <div>{inputWeekday}</div>
-                <EditDate value={inputDate} onChange={e => {
+                <textarea value={inputDate} onChange={e => {
                 setInputDate((e.target as HTMLTextAreaElement).value);
-            }}>{date}</EditDate>
+            }}>{date}</textarea>
             </Descr>
             <RemoveButton onClick={() => {
                 handleOnClickRemove(id);

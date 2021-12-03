@@ -63,10 +63,6 @@ const EditTitle = styled.textarea`
     font-weight: bold;
 `;
 
-const EditDate = styled.textarea`
-    
-`;
-
 const RemoveButton = styled.button`
     color: ${props => props.theme.colors.fontColor};
     float: right;
@@ -163,7 +159,8 @@ export const Entry: React.VFC<EntryProps> = ({onClickFunc, edit, children, id, t
 
     /**
      * newly added labels must be added to labelsToShow which will later be displayed.
-     * Existing labels must be also newly constructed because the Chip component misses onDelete if not in edit mode
+     * Existing labels must be also newly constructed because the Chip component 
+     * misses onDelete if not in edit mode
      */
     const prepareLabelsToShow = () => {
         const tmpAdded: JSX.Element[] = [];
@@ -178,7 +175,8 @@ export const Entry: React.VFC<EntryProps> = ({onClickFunc, edit, children, id, t
 
 
     /**
-     * newly added labels must be saved in an array so that later they can be persisted altogether in the database
+     * newly added labels must be saved in an array so that 
+     * later they can be persisted in the database altogether
      */
     const handleAddLabelOnClick = () => {
         if (!/\S/.test(inputNewLabel)) {  // contains only whitespaces or nothing
@@ -196,7 +194,6 @@ export const Entry: React.VFC<EntryProps> = ({onClickFunc, edit, children, id, t
     }
     
     if (editable) {
-
         return (
         <Wrapper>
             <AiOutlineCheck color="#747474"size="28px" style={{margin: '20px', float: "right"}} onClick={() => {
@@ -221,9 +218,9 @@ export const Entry: React.VFC<EntryProps> = ({onClickFunc, edit, children, id, t
                 <div>{labelInfo}</div>
                 <div>{labelsToShow}</div>
                 <div>{inputWeekday}</div>
-                <EditDate value={inputDate} onChange={e => {
+                <textarea value={inputDate} onChange={e => {
                 setInputDate((e.target as HTMLTextAreaElement).value);
-            }}>{date}</EditDate>
+            }}>{date}</textarea>
             </Descr>
             <RemoveButton onClick={() => {
                 handleOnClickRemove(id);
@@ -232,10 +229,10 @@ export const Entry: React.VFC<EntryProps> = ({onClickFunc, edit, children, id, t
         </Wrapper>
         );
     }
-   // setLabelsToShow(labels_arr);
 
     let fullscreenIcon = <AiOutlineFullscreen size="28px" onClick={() => setToDetailedview(true)}/>
-    // prevent user from accessing detailed page because it's not yetloaded from db
+
+    // prevent user from accessing detailed page of a newly added entry because it's not yet loaded from db
     if (id == "unsaved") {
         fullscreenIcon = <div></div>
     }

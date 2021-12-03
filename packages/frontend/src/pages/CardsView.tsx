@@ -1,16 +1,12 @@
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import React, { Fragment, useEffect, useState } from "react";
 import { Entry } from "../components/Entry";
-import { Theme } from "../Themes"
 import { Card } from "../components/Card";
 import styled from "styled-components";
 import { createDownloadLink, fetchEntriesCSV, mapDateToWeekday, mapMonthToStr } from "../util/Util";
 import Dropdown from "react-dropdown";
 import 'react-dropdown/style.css';
 import { Button, Chip } from "@mui/material";
-import { Link } from 'react-router-dom';
 
 
   const Mainbar = styled.div`
@@ -181,14 +177,6 @@ export const CardsView: React.VFC = () => {
     setLabels(labelArr);
   }
 
-  function handleRemoveButtonClick():void {
-    console.log("test");
-  }
-
-  function handleRemoveLabel():void {
-    console.log("§")
-  }
-
   useEffect(() => {
     (async function () {
       //request cards
@@ -210,7 +198,10 @@ export const CardsView: React.VFC = () => {
   },[render]);
 
     
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+/**
+ * construct entries as cards components and as entry components
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function constructEntries(cardJson: any) {
   cardsArr = [];
   const data = cardJson["data"];
