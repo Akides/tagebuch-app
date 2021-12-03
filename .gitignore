@@ -6,3 +6,5 @@ packages/backend/package-lock.json
 packages/backend/.env
 
 packages/backend/dist/
+
+packages/frontend/node_modules/

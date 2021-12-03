@@ -20,10 +20,11 @@ services:
     ports:
       - 3000:3000
       - 9229:9229
-    command: npm start
+    depends_on:
+      - db
+    command: bash -c 'while !</dev/tcp/db/3306; do sleep 1; done; npm start'
     volumes:
       - ./packages/backend:/var/app/backend
-      - node_modules:/var/app/backend/node_modules
 
   phpmyadmin:
     image: phpmyadmin
@@ -33,6 +34,18 @@ services:
       - 8080:80
     environment:
       - PMA_ARBITRARY=1
+
+  frontend:
+    image: node:13
+    working_dir: /var/app/frontend
+    ports:
+      - 3002:3002
+    depends_on: 
+      - backend
+    command: npm start
+    stdin_open: true
+    volumes:
+      - ./packages/frontend:/var/app/frontend
 
 
 volumes:
