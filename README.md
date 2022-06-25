@@ -1,4 +1,4 @@
-# FWE-WS21-22-764770 Tagebuch App
+# FWE-WS21-22 Tagebuch App
 
 ## **Installation**
 ---
